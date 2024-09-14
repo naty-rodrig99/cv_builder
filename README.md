@@ -34,7 +34,13 @@ This project has been bootstrapped using "T3 Stack" although I only kept the Dri
 
 Additionally, this project also uses [Lucia](https://lucia-auth.com/guides/email-and-password/basics) for authentication and session management.
 
-More from their docs for later:
+## Components
+
+I've gone ahead and already set up [shad/cn components](https://ui.shadcn.com/). They are probably the biggest reason to at the very least support Tailwind right now haha. To add new components please follow the documentation on the specific components page (e.g. [Dialog](https://ui.shadcn.com/docs/components/dialog)).
+
+---
+
+### More from the T3 docs for later:
 
 > ### How do I deploy this?
 >

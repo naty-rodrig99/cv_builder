@@ -16,14 +16,19 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const isProd = env.NODE_ENV === "production";
   return (
     <html
       lang="en"
       className={`${GeistSans.variable}`}
-      suppressHydrationWarning={true || isProd}
+      suppressHydrationWarning={true}
     >
-      <body suppressHydrationWarning={true || isProd}>{children}</body>
+      <body suppressHydrationWarning={true}>
+        <div className="flex min-h-screen w-full flex-col">
+          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   );
 }

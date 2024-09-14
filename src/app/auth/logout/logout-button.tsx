@@ -2,6 +2,7 @@
 
 import React from "react";
 import { logOut } from "~/app/auth/actions";
+import { Button } from "~/components/ui/button";
 
 export interface LogoutButtonProps
   extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onClick"> {
@@ -10,8 +11,7 @@ export interface LogoutButtonProps
 
 function LogoutButton(props: LogoutButtonProps) {
   return (
-    <button
-      type="button"
+    <Button
       {...props}
       onClick={async () => {
         try {
@@ -23,8 +23,8 @@ function LogoutButton(props: LogoutButtonProps) {
         }
       }}
     >
-      Logout
-    </button>
+      Log Out
+    </Button>
   );
 }
 

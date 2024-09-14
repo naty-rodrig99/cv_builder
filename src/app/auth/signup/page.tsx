@@ -11,10 +11,9 @@ async function Page() {
   }
 
   return (
-    <>
-      <h1>Create an account</h1>
+    <div className="flex h-screen w-full items-center justify-center px-4">
       <SignupForm />
-    </>
+    </div>
   );
 }
 
