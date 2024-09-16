@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -15,7 +15,16 @@ import { Label } from "~/components/ui/label";
 import { logIn } from "~/app/auth/actions";
 import { useRouter } from "next/navigation";
 
+
+function InvalidData({ errorMessage }: { errorMessage: string }): React.JSX.Element | null {
+  if (errorMessage) {
+    return <CardDescription className="text-red-600">{errorMessage}</CardDescription>;
+  }
+  return null
+}
+
 function LoginForm() {
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   return (
@@ -26,8 +35,10 @@ function LoginForm() {
           try {
             const result = await logIn(formData);
             if (result.ok) router.replace("/");
-            // Todo: Properly handle error.
-            else console.error(result.error);
+            else {
+              console.error(result.error);
+              setErrorMessage(result.error.message);
+            }
           } catch (e) {
             // Todo: Properly handle error.
             console.error(e);
@@ -41,6 +52,7 @@ function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
+          <InvalidData errorMessage={errorMessage} />
           <div className="grid gap-2">
             <Label htmlFor="username">Username</Label>
             <Input

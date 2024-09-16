@@ -12,6 +12,8 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { actionError, actionOk, ActionResult } from "~/tools/action-result";
 
+// Everything here is turned into API call so must be serializable
+
 const signupSchema = z.object({
   username: z.string().refine(
     async (username) => {

@@ -44,6 +44,7 @@ export const sessionTable = createTable("session", {
   expiresAt: int("expires_at").notNull(),
 });
 
+// Example table
 export const postTable = createTable(
   "post",
   {
