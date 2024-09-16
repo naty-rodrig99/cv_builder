@@ -32,7 +32,9 @@ This project has been bootstrapped using "T3 Stack" although I only kept the Dri
 > - [Drizzle](https://orm.drizzle.team)
 > - [Tailwind CSS](https://tailwindcss.com)
 
-Additionally, this project also uses [Lucia](https://lucia-auth.com/guides/email-and-password/basics) for authentication and session management.
+Additionally, this project also uses
+- [Lucia](https://lucia-auth.com/guides/email-and-password/basics) for authentication and session management.
+- [SQLite](https://www.sqlite.org/datatype3.html) as the database.
 
 ## Components
 
