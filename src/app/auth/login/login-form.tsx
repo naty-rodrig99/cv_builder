@@ -15,12 +15,17 @@ import { Label } from "~/components/ui/label";
 import { logIn } from "~/app/auth/actions";
 import { useRouter } from "next/navigation";
 
+interface InvalidDataProps {
+  errorMessage: string;
+}
 
-function InvalidData({ errorMessage }: { errorMessage: string }): React.JSX.Element | null {
+function InvalidData({ errorMessage }: InvalidDataProps) {
   if (errorMessage) {
-    return <CardDescription className="text-red-600">{errorMessage}</CardDescription>;
+    return (
+      <CardDescription className="text-red-600">{errorMessage}</CardDescription>
+    );
   }
-  return null
+  return null;
 }
 
 function LoginForm() {
