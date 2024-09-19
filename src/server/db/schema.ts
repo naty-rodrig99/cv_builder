@@ -3,6 +3,7 @@
 
 import { sql } from "drizzle-orm";
 import {
+  blob,
   index,
   int,
   sqliteTableCreator,
@@ -30,6 +31,12 @@ export const userTable = createTable(
     id: text("id").primaryKey(),
     username: text("username").unique().notNull(),
     passwordHash: text("password_hash").unique().notNull(),
+    fullName: text("full_name"),
+    birthDate: int("birthDate", { mode: "timestamp" }),
+    phoneNumber: text("phoneNumber"),
+    email: text("email"),
+    address: text("address"),
+    aboutMe: text("aboutMe"),
   },
   (table) => ({
     usernameUniqueIndex: uniqueIndex("usernameUniqueIndex").on(table.username),
@@ -44,20 +51,78 @@ export const sessionTable = createTable("session", {
   expiresAt: int("expires_at").notNull(),
 });
 
-// Example table
-export const postTable = createTable(
-  "post",
-  {
-    id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name", { length: 256 }),
-    createdAt: int("created_at", { mode: "timestamp" })
-      .default(sql`(unixepoch())`)
-      .notNull(),
-    updatedAt: int("updated_at", { mode: "timestamp" }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
+export const workExperienceTable = createTable("workExperience", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  jobStart: int("job_start", { mode: "timestamp" }),
+  jobEnd: int("job_end", { mode: "timestamp" }),
+  company: text("company"),
+  jobTitle: text("job_title"),
+  jobLocation: text("job_location"),
+  jobDescription: text("job_description"),
+});
+
+export const ExperienceTable = createTable("Experience", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  experienceStart: int("experience_start", { mode: "timestamp" }),
+  experienceEnd: int("experience_end", { mode: "timestamp" }),
+  experienceName: text("experience_name"),
+  experienceLocation: text("experience_location"),
+  experienceOrganism: text("experience_organism"),
+  experienceAbout: text("experience_about"),
+});
+
+export const degreeTable = createTable("degree", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  degreeStart: int("degree_start", { mode: "timestamp" }),
+  degreeEnd: int("degree_end", { mode: "timestamp" }),
+  degreeName: text("degree_name"),
+  universityLocation: text("university_location"),
+  university: text("university"),
+  degreeAbout: text("degree_about"),
+});
+
+export const projectTable = createTable("project", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  projectStart: int("project_start", { mode: "timestamp" }),
+  projectEnd: int("project_end", { mode: "timestamp" }),
+  projectName: text("project_name"),
+  projectAbout: text("project_about"),
+});
+
+export const linkTable = createTable("link", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  linkURL: text("link_url"),
+  linkName: text("link_name"),
+});
+
+export const skillTable = createTable("skill", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  skillName: text("skill_name"),
+});
+
+export const cvTable = createTable("CV", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  cvName: text("cv_name").unique().notNull(),
+  cvData: blob("cv_data"),
+});
