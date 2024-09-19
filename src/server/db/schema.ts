@@ -135,3 +135,13 @@ export const templateTable = createTable("template", {
   cvName: text("cv_name").unique().notNull(),
   cvData: blob("cv_data"),
 });
+
+export const starredTemplateTable = createTable("starred_template", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  templateId: text("template_id")
+    .notNull()
+    .references(() => templateTable.id),
+})
