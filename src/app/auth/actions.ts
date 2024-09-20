@@ -10,9 +10,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { actionError, actionOk, ActionResult } from "~/tools/action-result";
+import { actionError, actionOk, ActionResult } from "~/lib/action-result";
 
-// Everything here is turned into API call so must be serializable
+// Exported async functions are turned into API calls so their arguments must be serializable.
 
 const signupSchema = z.object({
   username: z.string().refine(
@@ -30,8 +30,6 @@ const signupSchema = z.object({
 export async function signUp(
   formData: FormData,
 ): ActionResult<null, { message: string; details?: unknown }> {
-  "use server";
-
   const result = await signupSchema.safeParseAsync({
     username: formData.get("username"),
     password: formData.get("password"),
