@@ -13,7 +13,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { logIn } from "~/app/auth/actions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface InvalidDataProps {
   errorMessage: string;
@@ -31,6 +31,7 @@ function InvalidData({ errorMessage }: InvalidDataProps) {
 function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const search = useSearchParams();
 
   return (
     <Card className="w-full max-w-sm">
@@ -39,13 +40,14 @@ function LoginForm() {
           console.log(formData);
           try {
             const result = await logIn(formData);
-            if (result.ok) router.replace("/");
+            const redirectUrl = search.get("redirectTo") || "/";
+            if (result.ok) router.replace(redirectUrl);
             else {
               console.error(result.error);
               setErrorMessage(result.error.message);
             }
           } catch (e) {
-            // Todo: Properly handle error.
+            // Todo: Properly handle likely network error.
             console.error(e);
           }
         }}
