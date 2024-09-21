@@ -11,19 +11,23 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { actionError, actionOk, ActionResult } from "~/lib/action-result";
+import { notEmpty } from "~/lib/zod";
 
 // Exported async functions are turned into API calls so their arguments must be serializable.
 
 const signupSchema = z.object({
-  username: z.string().refine(
-    async (username) => {
-      const existingUser = await db.query.userTable.findFirst({
-        where: eq(userTable.username, username),
-      });
-      return existingUser == null;
-    },
-    { message: "Username is already in use." },
-  ),
+  username: z
+    .string()
+    .pipe(notEmpty())
+    .refine(
+      async (username) => {
+        const existingUser = await db.query.userTable.findFirst({
+          where: eq(userTable.username, username),
+        });
+        return existingUser == null;
+      },
+      { message: "Username is already in use." },
+    ),
   password: z.string(),
 });
 
@@ -64,7 +68,7 @@ export async function signUp(
 }
 
 const loginSchema = z.object({
-  username: z.string(),
+  username: z.string().pipe(notEmpty()),
   password: z.string(),
 });
 

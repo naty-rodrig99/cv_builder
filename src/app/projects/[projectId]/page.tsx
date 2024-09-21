@@ -2,13 +2,16 @@ import { PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
 import { routeLogin, routeProject } from "~/app/routes";
+import CvEditor from "~/components/cv/cv-editor";
+import { newSchema } from "~/components/cv/schema.template";
+import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
 
 interface ProjectPageProps extends PageProps {
   params: { projectId: string };
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const projectId = params.projectId;
+  const projectId = decodeURIComponent(params.projectId);
   if (!projectId) {
     // Todo: Validate params.id to be a valid id (e.g. it is properly formed and exists).
     return notFound();
@@ -19,11 +22,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     redirect(routeLogin({ redirectTo: routeProject(projectId) }));
   }
 
+  // Todo: Grab this from the db.
+  const cvData = {
+    name: `Example (${projectId})`,
+    schema: newSchema({
+      elements: [
+        newSimpleTextElement({ text: "my text" }),
+        newSimpleTextElement({ text: "my other text" }),
+      ],
+    }),
+  };
+
   return (
-    <main className="flex h-screen w-full items-center justify-center bg-background px-4">
-      <ul>
-        <li>List of things</li>
-      </ul>
+    <main className="flex h-screen w-full flex-col items-center bg-background px-4">
+      <CvEditor cv={cvData} />
     </main>
   );
 }
