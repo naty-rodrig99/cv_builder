@@ -95,7 +95,7 @@ const Lead = forwardRef<
     <p
       {...props}
       ref={ref}
-      className={cn("text-muted-foreground text-xl", props.className)}
+      className={cn("text-xl text-muted-foreground", props.className)}
     >
       {props.children}
     </p>
@@ -166,7 +166,7 @@ const Muted = forwardRef<
     <span
       {...props}
       ref={ref}
-      className={cn("text-muted-foreground text-sm", props.className)}
+      className={cn("text-sm text-muted-foreground", props.className)}
     >
       {props.children}
     </span>
@@ -185,7 +185,7 @@ const InlineCode = forwardRef<
       {...props}
       ref={ref}
       className={cn(
-        "bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
+        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
         props.className,
       )}
     >
@@ -224,7 +224,7 @@ const Quote = forwardRef<
       {...props}
       ref={ref}
       className={cn(
-        "text-muted-foreground mt-6 border-l-2 pl-6 italic",
+        "mt-6 border-l-2 pl-6 italic text-muted-foreground",
         props.className,
       )}
     >

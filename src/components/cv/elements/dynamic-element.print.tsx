@@ -1,0 +1,25 @@
+import React from "react";
+import SimpleLayoutPrint from "./simple-layout/simple-layout.print";
+import SimpleTextPrint from "~/components/cv/elements/simple-text/simple-text.print";
+import { useSelector } from "~/components/cv/context";
+import { selectElement } from "~/components/cv/state/selectors";
+
+export interface PrintDynamicElementProps {
+  elementId: string;
+}
+
+const PrintDynamicElement = ({ elementId }: PrintDynamicElementProps) => {
+  const element = useSelector(selectElement(elementId));
+  if (!element) return null;
+
+  switch (element.type) {
+    case "simple-layout":
+      return <SimpleLayoutPrint element={element} />;
+    case "simple-text":
+      return <SimpleTextPrint element={element} />;
+    default:
+      return null;
+  }
+};
+
+export default PrintDynamicElement;

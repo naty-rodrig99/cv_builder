@@ -22,11 +22,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning={true}
     >
       <body suppressHydrationWarning={true}>
-        <div className="flex min-h-screen w-full flex-col">
-          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-            {children}
-          </div>
-        </div>
+        <div className="flex min-h-screen w-full flex-col">{children}</div>
       </body>
     </html>
   );

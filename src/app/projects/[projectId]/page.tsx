@@ -2,22 +2,16 @@ import { PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
 import { routeLogin, routeProject } from "~/app/routes";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "~/components/ui/resizable";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { cn } from "~/lib/utils";
-import { Card, CardContent } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
+import CvEditor from "~/components/cv/cv-editor";
+import { newSchema } from "~/components/cv/schema.template";
+import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
 
 interface ProjectPageProps extends PageProps {
   params: { projectId: string };
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const projectId = params.projectId;
+  const projectId = decodeURIComponent(params.projectId);
   if (!projectId) {
     // Todo: Validate params.id to be a valid id (e.g. it is properly formed and exists).
     return notFound();
@@ -28,39 +22,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     redirect(routeLogin({ redirectTo: routeProject(projectId) }));
   }
 
+  // Todo: Grab this from the db.
+  const cvData = {
+    name: `Example (${projectId})`,
+    schema: newSchema({
+      elements: [
+        newSimpleTextElement({ text: "my text" }),
+        newSimpleTextElement({ text: "my other text" }),
+      ],
+    }),
+  };
+
   return (
-    <main className="flex h-screen w-full items-center justify-center bg-background px-4">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={150}>
-          <ScrollArea
-            className={cn(
-              "inline-flex",
-              "items-center",
-              "size-full",
-              "bg-orange-500",
-            )}
-          >
-            <Card className={cn("self-center", "w-full", "aspect-[21/29.7]")}>
-              <CardContent>
-                <ul>
-                  <li>List of things</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </ScrollArea>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={50}>
-          <ScrollArea className="size-full">
-            {[...Array(25)].map((e, i) => (
-              <>
-                <div key={e}>Add Component here</div>
-                <Separator className="my-2" />
-              </>
-            ))}
-          </ScrollArea>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+    <main className="flex h-screen w-full flex-col items-center bg-background px-4">
+      <CvEditor cv={cvData} />
     </main>
   );
 }
