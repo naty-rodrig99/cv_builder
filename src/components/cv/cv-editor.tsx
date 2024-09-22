@@ -12,9 +12,15 @@ import { H1, H3, P } from "~/components/ui/typography";
 import { CvSchema } from "~/components/cv/schema";
 import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { useCvEditorState } from "~/components/cv/state/use-cv-editor-state";
-import { CvBuilderContextProvider, useSelector } from "~/components/cv/context";
-import { cn } from "~/lib/utils";
+import {
+  CvBuilderContextProvider,
+  useDispatch,
+  useSelector,
+} from "~/components/cv/context";
+import { cn, format2twdAspect } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
+import { zoom } from "./state/reducer";
 
 const ElementPanel = () => {
   return (
@@ -47,29 +53,18 @@ const ElementPanel = () => {
   );
 };
 
-export interface CvPreviewProps {
-  cv: {
-    name: string;
-    schema: CvSchema;
-  };
-}
-
 const PreviewPanel = () => {
   const rootElement = useSelector((state) => state.schema.rootElement);
-  const ratio = useSelector((state) => state.schema.size);
-  // TODO: adapt ratio to ratio
+  const ratio = format2twdAspect(useSelector((state) => state.schema.format));
+  const zoom = useSelector((state) => state.zoom);
+  // TODO: add aspect ratio selection
   // TODO: include zoom
 
   return (
-    <ScrollArea className={cn("size-full", "pr-10", "pb-10")}>
+    <ScrollArea className={cn("size-full", "p-8", "flex", "justify-center")}>
       <Card
-        className={cn(
-          "zoom-[2.5]",
-          "p-12",
-          "m-300",
-          "w-[500mm]",
-          "aspect-[21/29.7]",
-        )}
+        className={cn("p-12", "w-[250mm]", "mx-auto")}
+        style={{ zoom: zoom, aspectRatio: ratio }}
       >
         <DynamicElementEdit elementId={rootElement} />
       </Card>
@@ -78,7 +73,38 @@ const PreviewPanel = () => {
   );
 };
 
-const CvEditor = ({ cv }: CvPreviewProps) => {
+const ZOOM_RATIO = 1.1;
+const ZoomButtons = () => {
+  const dispatch = useDispatch();
+  return (
+    <div className={cn("absolute", "right-16", "top-[50%]", "object-right")}>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => dispatch(zoom(ZOOM_RATIO))}
+      >
+        <ZoomInIcon />
+      </Button>
+      <br />
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => dispatch(zoom(1 / ZOOM_RATIO))}
+      >
+        <ZoomOutIcon />
+      </Button>
+    </div>
+  );
+};
+
+export interface CvEditorProps {
+  cv: {
+    name: string;
+    schema: CvSchema;
+  };
+}
+
+const CvEditor = ({ cv }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.schema);
 
   return (
@@ -93,8 +119,9 @@ const CvEditor = ({ cv }: CvPreviewProps) => {
             <ElementPanel />
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={67} className="p-8">
+          <ResizablePanel defaultSize={67} className="p-0">
             <PreviewPanel />
+            <ZoomButtons />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

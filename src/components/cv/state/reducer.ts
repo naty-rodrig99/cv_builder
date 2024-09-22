@@ -67,16 +67,37 @@ const selectionReducer: Reducer = (state, action) => {
   }
 };
 
+const Zoom = Symbol.for("Zoom");
+export const zoom = (multiplier: number) => {
+  return { type: Zoom, payload: { multiplier } } as const;
+};
+export type ZoomAction = ReturnType<typeof zoom>;
+
+const ZoomReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case Zoom: {
+      if (action.payload.multiplier <= 0) {
+        // TODO: deal with that error
+      }
+      console.debug(state);
+      return { ...state, zoom: state.zoom * action.payload.multiplier };
+    }
+    default:
+      return state;
+  }
+};
+
 export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
-  | SelectElementAction;
+  | SelectElementAction
+  | ZoomAction;
 
 export const cvStateReducer = (
   state: Readonly<CvBuilderState>,
   action: AnyAction,
 ): Readonly<CvBuilderState> => {
-  const reducers = [simpleTextReducer, simpleLayoutReducer, selectionReducer];
+  const reducers = [simpleTextReducer, simpleLayoutReducer, selectionReducer, ZoomReducer];
   return reducers.reduce((s, reducer) => {
     const result = reducer(s, action);
     return typeof result === "function" ? result(state) : result;
