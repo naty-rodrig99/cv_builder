@@ -24,7 +24,7 @@ import { zoom } from "./state/reducer";
 
 const ElementPanel = () => {
   return (
-    <>
+    <ScrollArea className={cn("size-full", "p-8")}>
       <H3>Elements Panel</H3>
       <P>Todo: Enable drag and drop, creating new elements, etc.</P>
       <br />
@@ -49,7 +49,14 @@ const ElementPanel = () => {
           </Card>
         </li>
       </ul>
-    </>
+      <ul>
+        {[...Array(25)].map((e, i) => (
+          <>
+            <div key={e}>Add Component here</div>
+          </>
+        ))}
+      </ul>
+    </ScrollArea>
   );
 };
 
@@ -58,7 +65,6 @@ const PreviewPanel = () => {
   const ratio = format2twdAspect(useSelector((state) => state.schema.format));
   const zoom = useSelector((state) => state.zoom);
   // TODO: add aspect ratio selection
-  // TODO: include zoom
 
   return (
     <ScrollArea className={cn("size-full", "p-8", "flex", "justify-center")}>
@@ -115,11 +121,11 @@ const CvEditor = ({ cv }: CvEditorProps) => {
           <Button>Export</Button>
         </header>
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={33} className="p-8">
+          <ResizablePanel defaultSize={33}>
             <ElementPanel />
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={67} className="p-0">
+          <ResizablePanel defaultSize={67}>
             <PreviewPanel />
             <ZoomButtons />
           </ResizablePanel>
