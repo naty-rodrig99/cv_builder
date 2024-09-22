@@ -11,6 +11,7 @@ import {
 export type CvBuilderState = {
   schema: CvSchema;
   selection: string | null;
+  zoom: number;
 };
 
 type ElementUpdate<I, O = I> = Partial<O> | ((element: I) => Partial<O>);
@@ -86,5 +87,6 @@ export const initialCvBuilderState = (schema: CvSchema) => {
   return {
     schema: schema,
     selection: null,
+    zoom: 1,
   } satisfies CvBuilderState;
 };
