@@ -79,7 +79,7 @@ export const ExperienceTable = createTable("Experience", {
   experienceEnd: int("experience_end", { mode: "timestamp" }),
   experienceName: text("experience_name"),
   experienceLocation: text("experience_location"),
-  experienceOrganism: text("experience_organism"),
+  experienceOrganization: text("experience_organization"),
   experienceAbout: text("experience_about"),
 });
 
