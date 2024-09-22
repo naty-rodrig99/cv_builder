@@ -150,8 +150,8 @@ export const templateTable = createTable("template", {
     .references(() => userTable.id),
   createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
   updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  cvName: text("cv_name").unique().notNull(),
-  cvData: blob("cv_data"),
+  templateName: text("template_name").unique().notNull(),
+  templateData: blob("cv_data"),
 });
 
 export const starredTemplateTable = createTable("starred_template", {
