@@ -11,7 +11,7 @@ export type CvSchema = {
   rootElement: string;
   elements: Record<string, AnyElement>;
   theme: "professional" | "minimalistic" | "creative";
-  size: "DINA4" | "Letter";
+  format: "DINA4" | "Letter";
 };
 
 // Using zod for type definitions, which allows for runtime validation to be baked right in.
