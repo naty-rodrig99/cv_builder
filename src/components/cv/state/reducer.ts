@@ -1,4 +1,4 @@
-import { AnyElement, CvSchema } from "~/components/cv/schema";
+import { AnyElement, CvFormat, CvSchema } from "~/components/cv/schema";
 import {
   SimpleTextActions,
   simpleTextReducer,
@@ -87,17 +87,43 @@ const ZoomReducer: Reducer = (state, action) => {
   }
 };
 
+const SetFormat = Symbol.for("SetFormat");
+export const setFormat = (value: CvFormat) => {
+  return { type: SetFormat, payload: { value } } as const;
+};
+export type SetFormatAction = ReturnType<typeof setFormat>;
+
+const SetFormatReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case SetFormat: {
+      return {
+        ...state,
+        schema: { ...state.schema, format: action.payload.value },
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
   | SelectElementAction
-  | ZoomAction;
+  | ZoomAction
+  | SetFormatAction;
 
 export const cvStateReducer = (
   state: Readonly<CvBuilderState>,
   action: AnyAction,
 ): Readonly<CvBuilderState> => {
-  const reducers = [simpleTextReducer, simpleLayoutReducer, selectionReducer, ZoomReducer];
+  const reducers = [
+    simpleTextReducer,
+    simpleLayoutReducer,
+    selectionReducer,
+    ZoomReducer,
+    SetFormatReducer,
+  ];
   return reducers.reduce((s, reducer) => {
     const result = reducer(s, action);
     return typeof result === "function" ? result(state) : result;

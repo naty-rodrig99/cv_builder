@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
 import { H1, H3, P } from "~/components/ui/typography";
-import { CvSchema } from "~/components/cv/schema";
+import { cvFormats, CvSchema } from "~/components/cv/schema";
 import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { useCvEditorState } from "~/components/cv/state/use-cv-editor-state";
 import {
@@ -17,10 +17,13 @@ import {
   useDispatch,
   useSelector,
 } from "~/components/cv/context";
-import { cn, format2twdAspect } from "~/lib/utils";
+import { cn, format2aspectRatio } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import { zoom } from "./state/reducer";
+import { setFormat, zoom } from "./state/reducer";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
 
 const ElementPanel = () => {
   return (
@@ -62,15 +65,14 @@ const ElementPanel = () => {
 
 const PreviewPanel = () => {
   const rootElement = useSelector((state) => state.schema.rootElement);
-  const ratio = format2twdAspect(useSelector((state) => state.schema.format));
+  const format = useSelector((state) => state.schema.format);
   const zoom = useSelector((state) => state.zoom);
-  // TODO: add aspect ratio selection
 
   return (
     <ScrollArea className={cn("size-full", "p-8", "flex", "justify-center")}>
       <Card
         className={cn("p-12", "w-[250mm]", "mx-auto")}
-        style={{ zoom: zoom, aspectRatio: ratio }}
+        style={{ zoom: zoom, aspectRatio: format2aspectRatio(format) }}
       >
         <DynamicElementEdit elementId={rootElement} />
       </Card>
@@ -103,6 +105,42 @@ const ZoomButtons = () => {
   );
 };
 
+const FormatSelector = () => {
+  const format = useSelector((state) => state.schema.format);
+  const dispatch = useDispatch();
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn("py-0", "rounded-2xl", "leading-tight")}
+        >
+          Format: {format}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className={cn("w-fit", "p-1")}>
+        {cvFormats.map((type, i) => (
+          <>
+            {i > 0 ? <Separator /> : <></>}
+            <Label
+              onClick={() => dispatch(setFormat(type))}
+              className={cn(
+                "w-full",
+                "px-6",
+                "rounded-l",
+                "hover:bg-accent",
+                "hover:text-accent-foreground",
+              )}
+            >
+              {type}
+            </Label>
+          </>
+        ))}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 export interface CvEditorProps {
   cv: {
     name: string;
@@ -118,6 +156,7 @@ const CvEditor = ({ cv }: CvEditorProps) => {
       <div className="flex size-full flex-col">
         <header className="flex flex-row justify-between p-8">
           <H1>{cv.name}</H1>
+          <FormatSelector />
           <Button>Export</Button>
         </header>
         <ResizablePanelGroup direction="horizontal">
