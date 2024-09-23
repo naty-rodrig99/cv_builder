@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { abstractElement } from "~/components/cv/schema";
+import { abstractElement } from "../../abstract-element";
 
 export const simpleTextElement = abstractElement.extend({
   type: z.literal("simple-text"),
