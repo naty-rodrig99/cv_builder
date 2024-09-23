@@ -12,3 +12,6 @@ export const routeSignup = () => routeAuth() + "/signup";
 export const routeProjects = () => routeRoot() + "/projects";
 export const routeProject = (projectId = ":projectId") =>
   routeProjects() + `/${projectId}`;
+
+//Testing Landing Page Route
+export const routeLanding = () => routeRoot() + "/landing";

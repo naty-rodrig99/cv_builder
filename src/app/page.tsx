@@ -3,7 +3,7 @@ import { getUser } from "~/server/user";
 import LogoutButton from "~/app/auth/logout/logout-button";
 import { Button } from "~/components/ui/button";
 import { H1, P } from "~/components/ui/typography";
-import { routeLogin, routeSignup } from "~/app/routes";
+import { routeLogin, routeSignup, routeLanding } from "~/app/routes";
 
 export default async function HomePage() {
   const user = await getUser();
@@ -25,6 +25,11 @@ export default async function HomePage() {
           {!user && (
             <Button asChild>
               <Link href={routeLogin()}>Log In</Link>
+            </Button>
+          )}
+          {!user && (
+            <Button asChild>
+              <Link href={routeLanding()}>Landing</Link>
             </Button>
           )}
           {user && <LogoutButton />}
