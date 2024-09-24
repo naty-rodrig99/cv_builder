@@ -2,7 +2,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { lucia } from "~/server/auth";
 import { db } from "./db";
-import { cvTable, projectTable } from "./db/schema";
+import { cvTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 
 // https://lucia-auth.com/guides/validate-session-cookies/nextjs-app

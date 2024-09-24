@@ -1,9 +1,8 @@
 import { getProjects, getUser } from "~/server/user";
 import { redirect } from "next/navigation";
 import { routeLogin, routeProjects } from "~/app/routes";
-import { cn } from "~/lib/utils";
-import { Separator } from "@radix-ui/react-menubar";
 import { Label } from "~/components/ui/label";
+import ProjectsList from "./projects-list";
 
 export default async function ProjectsPage() {
   const user = await getUser();
@@ -13,7 +12,7 @@ export default async function ProjectsPage() {
   }
 
   const projects = await getProjects();
-  if (!projects || projects.length == 0) {
+  if (!projects) {
     return (
       <main className="flex h-screen w-full items-center justify-center bg-background px-4">
         <Label>No projects created yet</Label>
@@ -23,12 +22,7 @@ export default async function ProjectsPage() {
 
   return (
     <main className="flex h-screen w-full items-center justify-center bg-background px-4">
-      {projects.map((project, i) => (
-        <>
-          {i > 0 ? <Separator /> : <></>}
-          <Label>{project.name}</Label>
-        </>
-      ))}
+      <ProjectsList projects={projects} />
     </main>
   );
 }
