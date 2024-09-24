@@ -80,7 +80,11 @@ function LoginForm() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            onClick={() => setErrorMessage("")}
+          >
             Log In
           </Button>
         </CardFooter>

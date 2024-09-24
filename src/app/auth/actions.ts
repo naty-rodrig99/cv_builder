@@ -41,7 +41,8 @@ export async function signUp(
 
   if (!result.success) {
     return actionError({
-      message: "Invalid form input.",
+      message:
+        "Invalid username/password. Make sure that your username is not already used.",
       details: result.error.flatten(),
     });
   }
