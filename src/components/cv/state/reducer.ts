@@ -1,4 +1,4 @@
-import { AnyElement, CvSchema } from "~/components/cv/schema";
+import { AnyElement, CvFormat, CvSchema } from "~/components/cv/schema";
 import {
   SimpleTextActions,
   simpleTextReducer,
@@ -11,6 +11,7 @@ import {
 export type CvBuilderState = {
   schema: CvSchema;
   selection: string | null;
+  zoom: number;
 };
 
 type ElementUpdate<I, O = I> = Partial<O> | ((element: I) => Partial<O>);
@@ -66,16 +67,63 @@ const selectionReducer: Reducer = (state, action) => {
   }
 };
 
+const Zoom = Symbol.for("Zoom");
+export const zoom = (multiplier: number) => {
+  return { type: Zoom, payload: { multiplier } } as const;
+};
+export type ZoomAction = ReturnType<typeof zoom>;
+
+const ZoomReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case Zoom: {
+      if (action.payload.multiplier <= 0) {
+        // TODO: deal with that error
+      }
+      console.debug(state);
+      return { ...state, zoom: state.zoom * action.payload.multiplier };
+    }
+    default:
+      return state;
+  }
+};
+
+const SetFormat = Symbol.for("SetFormat");
+export const setFormat = (value: CvFormat) => {
+  return { type: SetFormat, payload: { value } } as const;
+};
+export type SetFormatAction = ReturnType<typeof setFormat>;
+
+const FormatReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case SetFormat: {
+      return {
+        ...state,
+        schema: { ...state.schema, format: action.payload.value },
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
-  | SelectElementAction;
+  | SelectElementAction
+  | ZoomAction
+  | SetFormatAction;
 
 export const cvStateReducer = (
   state: Readonly<CvBuilderState>,
   action: AnyAction,
 ): Readonly<CvBuilderState> => {
-  const reducers = [simpleTextReducer, simpleLayoutReducer, selectionReducer];
+  const reducers = [
+    simpleTextReducer,
+    simpleLayoutReducer,
+    selectionReducer,
+    ZoomReducer,
+    FormatReducer,
+  ];
   return reducers.reduce((s, reducer) => {
     const result = reducer(s, action);
     return typeof result === "function" ? result(state) : result;
@@ -86,5 +134,6 @@ export const initialCvBuilderState = (schema: CvSchema) => {
   return {
     schema: schema,
     selection: null,
+    zoom: 1,
   } satisfies CvBuilderState;
 };
