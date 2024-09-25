@@ -93,7 +93,7 @@ export const setFormat = (value: CvFormat) => {
 };
 export type SetFormatAction = ReturnType<typeof setFormat>;
 
-const SetFormatReducer: Reducer = (state, action) => {
+const FormatReducer: Reducer = (state, action) => {
   switch (action.type) {
     case SetFormat: {
       return {
@@ -122,7 +122,7 @@ export const cvStateReducer = (
     simpleLayoutReducer,
     selectionReducer,
     ZoomReducer,
-    SetFormatReducer,
+    FormatReducer,
   ];
   return reducers.reduce((s, reducer) => {
     const result = reducer(s, action);
