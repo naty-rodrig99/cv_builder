@@ -1,16 +1,16 @@
 import { PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
-import { routeLogin, routeProject } from "~/app/routes";
-import CvEditor from "~/components/cv/cv-editor";
+import { routeLogin, routeProjectExport } from "~/app/routes";
 import { newSchema } from "~/components/cv/schema.template";
 import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
+import CvPrint from "~/components/cv/cv-print";
 
 interface ProjectPageProps extends PageProps {
   params: { projectId: string };
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
+export default async function ProjectExportPage({ params }: ProjectPageProps) {
   const projectId = decodeURIComponent(params.projectId);
   if (!projectId) {
     // Todo: Validate params.id to be a valid id (e.g. it is properly formed and exists).
@@ -19,7 +19,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const user = await getUser();
   if (!user) {
-    redirect(routeLogin({ redirectTo: routeProject(projectId) }));
+    redirect(routeLogin({ redirectTo: routeProjectExport(projectId) }));
   }
 
   // Todo: Grab this from the db.
@@ -34,8 +34,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   };
 
   return (
-    <main className="flex h-screen w-full flex-col items-center bg-background px-4">
-      <CvEditor projectId={projectId} cv={cvData} />
-    </main>
+    <div className="flex h-screen w-full flex-col items-center bg-background px-4">
+      <CvPrint projectId={projectId} schema={cvData.schema} />
+    </div>
   );
 }

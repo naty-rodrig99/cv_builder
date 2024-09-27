@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "~/lib/utils";
-import DynamicEdit from "~/components/cv/elements/dynamic-element.edit";
+import DynamicElementPrint from "~/components/cv/elements/dynamic-element.print";
 import { SimpleLayoutElement } from "./simple-layout.schema";
 
 export interface SimpleLayoutPrintProps {
@@ -16,7 +16,7 @@ const SimpleLayoutPrint = ({ element }: SimpleLayoutPrintProps) => {
       })}
     >
       {element.slots.children.map((id) => (
-        <DynamicEdit elementId={id} />
+        <DynamicElementPrint key={id} elementId={id} />
       ))}
     </div>
   );

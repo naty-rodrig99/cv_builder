@@ -11,7 +11,7 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="relative">
+    <div className="relative p-2">
       <Textarea
         className="w-full"
         value={element.data.text}

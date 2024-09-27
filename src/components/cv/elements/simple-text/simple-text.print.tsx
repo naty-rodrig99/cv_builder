@@ -6,7 +6,7 @@ export interface SimpleTextPrintProps {
 }
 
 const SimpleTextPrint = ({ element }: SimpleTextPrintProps) => {
-  return <p>{element.data.text}</p>;
+  return <p className="m-0 p-2">{element.data.text}</p>;
 };
 
 export default SimpleTextPrint;

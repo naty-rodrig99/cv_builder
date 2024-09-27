@@ -24,6 +24,9 @@ import { setFormat, zoom } from "./state/reducer";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import Link from "next/link";
+import { routeProjectExport } from "~/app/routes";
+import Paper from "~/components/paper";
 
 const ElementPanel = () => {
   return (
@@ -69,13 +72,12 @@ const PreviewPanel = () => {
   const zoom = useSelector((state) => state.zoom);
 
   return (
-    <ScrollArea className={cn("size-full", "p-8", "flex", "justify-center")}>
-      <Card
-        className={cn("p-12", "w-[250mm]", "mx-auto")}
-        style={{ zoom: zoom, aspectRatio: format2aspectRatio(format) }}
-      >
-        <DynamicElementEdit elementId={rootElement} />
-      </Card>
+    <ScrollArea className={cn("size-full", "flex", "justify-center")}>
+      <div className="p-10">
+        <Paper paperSize={format} className="mx-auto" style={{ zoom: zoom }}>
+          <DynamicElementEdit elementId={rootElement} />
+        </Paper>
+      </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
@@ -142,13 +144,14 @@ const FormatSelector = () => {
 };
 
 export interface CvEditorProps {
+  projectId: string;
   cv: {
     name: string;
     schema: CvSchema;
   };
 }
 
-const CvEditor = ({ cv }: CvEditorProps) => {
+const CvEditor = ({ projectId, cv }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.schema);
 
   return (
@@ -157,7 +160,9 @@ const CvEditor = ({ cv }: CvEditorProps) => {
         <header className="flex flex-row justify-between p-8">
           <H1>{cv.name}</H1>
           <FormatSelector />
-          <Button>Export</Button>
+          <Button asChild>
+            <Link href={routeProjectExport(projectId)}>Export</Link>
+          </Button>
         </header>
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={33}>
