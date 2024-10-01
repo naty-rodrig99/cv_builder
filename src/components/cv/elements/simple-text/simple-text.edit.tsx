@@ -8,8 +8,6 @@ export interface SimpleTextEditProps {
   element: SimpleTextElement;
 }
 
-const MIN_TEXTAREA_HEIGHT = 32;
-
 const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   const dispatch = useDispatch();
   const textAreaRef: any = React.useRef(null);
@@ -20,16 +18,13 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
     // Reset height - important to shrink on delete
     textAreaRef.current.style.height = "inherit";
     // Set height
-    textAreaRef.current.style.height = `${Math.max(
-      textAreaRef.current.scrollHeight,
-      MIN_TEXTAREA_HEIGHT,
-    )}px`;
+    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
   }, [value]);
 
   return (
     <div className="relative p-2">
       <Textarea
-        className="w-full resize-none border-none shadow-none hover:border-solid"
+        className="w-full resize-none border-none shadow-none"
         ref={textAreaRef}
         value={element.data.text}
         onChange={(event) => {
