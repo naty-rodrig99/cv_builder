@@ -17,6 +17,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
     "@libsql/client": "^0.9.0",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
