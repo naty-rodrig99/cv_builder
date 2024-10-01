@@ -15,10 +15,9 @@ import {
 
 export interface SimpleLayoutEditProps {
   element: SimpleLayoutElement;
-  children: React.ReactNode;
 }
 
-const SimpleLayoutEdit = ({ element, children }: SimpleLayoutEditProps) => {
+const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
   const dispatch = useDispatch();
 
   return (
