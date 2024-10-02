@@ -24,9 +24,10 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   return (
     <div className="relative p-2">
       <Textarea
-        className="w-full resize-none border-none shadow-none"
+        className="w-full resize-none border-none shadow-none bg-green-50"
         ref={textAreaRef}
         value={element.data.text}
+        defaultValue={"Your text here"}
         onChange={(event) => {
           dispatch(setText(element.id, event.target.value));
           onChange(event);

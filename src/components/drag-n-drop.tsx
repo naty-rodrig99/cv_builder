@@ -4,6 +4,7 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
+import { cn } from "~/lib/utils";
 
 interface DraggableProps<E extends string> {
   id: E;
@@ -44,6 +45,9 @@ interface DropZoneProps<E> {
   onDrop: (event: DragEndEvent) => void;
 }
 export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: id,
+  });
   useDndMonitor({
     onDragEnd: (event) => {
       if (!event.over) return;
@@ -53,8 +57,14 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
     },
   });
   return (
-    <Droppable id={id}>
-      Drop Here
-    </Droppable>
+    <div id={id} className={cn("relative", "w-full")}>
+      <div
+        ref={setNodeRef}
+        className={cn(
+          "outline-radius-5 absolute left-0 right-0 top-0 h-[24px] invisible",
+          isOver && "outline-dashed outline-border visible",
+        )}
+      />
+    </div>
   );
 }

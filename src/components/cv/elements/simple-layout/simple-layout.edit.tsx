@@ -3,7 +3,10 @@ import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { cn } from "~/lib/utils";
 import { SimpleLayoutElement } from "./simple-layout.schema";
 import { useDispatch } from "~/components/cv/context";
-import { appendNewElement, setDirection } from "~/components/cv/elements/simple-layout/simple-layout.state";
+import {
+  appendNewElement,
+  setDirection,
+} from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -37,7 +40,7 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
             </>
           ))}
           <DropZone
-            id="todo"
+            id={element.id + "-final-dropzone"}
             onDrop={(event) => {
               const elementType = event.active.id as AnyElement["type"];
               dispatch(appendNewElement(element.id, elementType));
