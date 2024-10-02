@@ -2,7 +2,9 @@ import React from "react";
 import SimpleLayoutEdit from "./simple-layout/simple-layout.edit";
 import SimpleTextEdit from "./simple-text/simple-text.edit";
 import { selectElement } from "~/components/cv/state/selectors";
-import { useSelector } from "~/components/cv/context";
+import { useDispatch, useSelector } from "~/components/cv/context";
+import { cn } from "~/lib/utils";
+import { focusElement } from "../state/reducer";
 
 export interface DynamicElementEditProps {
   elementId: string;
@@ -11,7 +13,9 @@ export interface DynamicElementEditProps {
 const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
   const element = useSelector(selectElement(elementId));
   if (!element) return null;
+  const isSelected = useSelector((state) => state.selection) === element.id;
   let elementComponent: React.ReactNode | null = null;
+  const dispatch = useDispatch();
 
   switch (element.type) {
     case "simple-layout":
@@ -22,7 +26,20 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       break;
     default:
   }
-  return <div className="hover:outline-dashed outline-border outline-radius-5">{elementComponent}</div>;
+  return (
+    <div
+      className={cn(
+        "outline-radius-5 outline-border",
+        isSelected && "outline-dashed",
+      )}
+      onClick={(event) => {
+        event.stopPropagation();
+        dispatch(focusElement(element.id));
+      }}
+    >
+      {elementComponent}
+    </div>
+  );
 };
 
 export default DynamicElementEdit;

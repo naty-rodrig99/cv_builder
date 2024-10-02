@@ -51,15 +51,15 @@ export type Action<
   payload?: Payload;
 };
 
-const SelectElement = Symbol.for("SelectElement");
-export const selectElement = (id: string) => {
-  return { type: SelectElement, payload: { id } } as const;
+const FocusElement = Symbol.for("FocusElement");
+export const focusElement = (id: string) => {
+  return { type: FocusElement, payload: { id } } as const;
 };
-export type SelectElementAction = ReturnType<typeof selectElement>;
+export type FocusElementAction = ReturnType<typeof focusElement>;
 
 const selectionReducer: Reducer = (state, action) => {
   switch (action.type) {
-    case SelectElement: {
+    case FocusElement: {
       return { ...state, selection: action.payload.id };
     }
     default:
@@ -109,7 +109,7 @@ const FormatReducer: Reducer = (state, action) => {
 export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
-  | SelectElementAction
+  | FocusElementAction
   | ZoomAction
   | SetFormatAction;
 
