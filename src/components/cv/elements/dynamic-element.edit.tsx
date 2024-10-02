@@ -11,15 +11,18 @@ export interface DynamicElementEditProps {
 const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
   const element = useSelector(selectElement(elementId));
   if (!element) return null;
+  let elementComponent: React.ReactNode | null = null;
 
   switch (element.type) {
     case "simple-layout":
-      return <SimpleLayoutEdit element={element} />;
+      elementComponent = <SimpleLayoutEdit element={element} />;
+      break;
     case "simple-text":
-      return <SimpleTextEdit element={element} />;
+      elementComponent = <SimpleTextEdit element={element} />;
+      break;
     default:
-      return null;
   }
+  return <div className="hover:outline-dashed outline-border outline-radius-5">{elementComponent}</div>;
 };
 
 export default DynamicElementEdit;
