@@ -13,6 +13,18 @@ export const setDirection = (
   }) as const;
 type SetTextAction = ReturnType<typeof setDirection>;
 
+const PrependNewElement = Symbol.for("PrependNewElement");
+export const prependNewElement = (
+  id: string,
+  elementType: AnyElement["type"],
+  index: number,
+) =>
+  ({
+    type: PrependNewElement,
+    payload: { id, elementType, index },
+  }) as const;
+type PrependNewElementAction = ReturnType<typeof prependNewElement>;
+
 const AppendNewElement = Symbol.for("AppendNewElement");
 export const appendNewElement = (id: string, elementType: AnyElement["type"]) =>
   ({
@@ -21,7 +33,10 @@ export const appendNewElement = (id: string, elementType: AnyElement["type"]) =>
   }) as const;
 type AppendNewElementAction = ReturnType<typeof appendNewElement>;
 
-export type SimpleLayoutActions = SetTextAction | AppendNewElementAction;
+export type SimpleLayoutActions =
+  | SetTextAction
+  | AppendNewElementAction
+  | PrependNewElementAction;
 
 export const simpleLayoutReducer: Reducer = (state, action) => {
   switch (action.type) {
@@ -31,10 +46,32 @@ export const simpleLayoutReducer: Reducer = (state, action) => {
         options: { ...el.options, direction: action.payload.direction },
       }));
     }
+    case PrependNewElement: {
+      const newElementTemplate = createElement(action.payload.elementType);
+      if (!newElementTemplate) return state;
+      const [newElement, elements] = newElementTemplate;
+      const nextState = updateElement(
+        "simple-layout",
+        action.payload.id,
+        (el) => {
+          const newChildren = [...el.slots!.children];
+          newChildren.splice(action.payload.index, 0, newElement.id);
+          return {
+            ...el,
+            slots: { children: newChildren },
+          };
+        },
+      )(state);
+      return {
+        ...nextState,
+        schema: {
+          ...nextState.schema,
+          elements: { ...nextState.schema.elements, ...elements },
+        },
+      };
+    }
     case AppendNewElement: {
       const newElementTemplate = createElement(action.payload.elementType);
-      console.log(newElementTemplate);
-      console.log(state.schema);
       if (!newElementTemplate) return state;
       const [newElement, elements] = newElementTemplate;
       const nextState = updateElement(

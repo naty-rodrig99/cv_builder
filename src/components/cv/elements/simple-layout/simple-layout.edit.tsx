@@ -5,6 +5,7 @@ import { SimpleLayoutElement } from "./simple-layout.schema";
 import { useDispatch } from "~/components/cv/context";
 import {
   appendNewElement,
+  prependNewElement,
   setDirection,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
@@ -34,8 +35,15 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
             "flex-row": element.options.direction === "horizontal",
           })}
         >
-          {element.slots.children.map((id) => (
+          {element.slots.children.map((id, index) => (
             <>
+              <DropZone
+                id={id + "-previous-dropzone"}
+                onDrop={(event) => {
+                  const elementType = event.active.id as AnyElement["type"];
+                  dispatch(prependNewElement(element.id, elementType, index));
+                }}
+              ></DropZone>
               <DynamicElementEdit key={id} elementId={id} />
             </>
           ))}
