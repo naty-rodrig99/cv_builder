@@ -3,7 +3,7 @@ import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { cn } from "~/lib/utils";
 import { SimpleLayoutElement } from "./simple-layout.schema";
 import { useDispatch } from "~/components/cv/context";
-import { setDirection } from "~/components/cv/elements/simple-layout/simple-layout.state";
+import { appendNewElement, setDirection } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -12,6 +12,8 @@ import {
   ContextMenuRadioItem,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
+import { DropZone } from "~/components/drag-n-drop";
+import { AnyElement } from "../../schema";
 
 export interface SimpleLayoutEditProps {
   element: SimpleLayoutElement;
@@ -30,8 +32,17 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
           })}
         >
           {element.slots.children.map((id) => (
-            <DynamicElementEdit key={id} elementId={id} />
+            <>
+              <DynamicElementEdit key={id} elementId={id} />
+            </>
           ))}
+          <DropZone
+            id="todo"
+            onDrop={(event) => {
+              const elementType = event.active.id as AnyElement["type"];
+              dispatch(appendNewElement(element.id, elementType));
+            }}
+          ></DropZone>
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
