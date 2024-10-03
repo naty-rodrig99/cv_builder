@@ -29,7 +29,7 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
   return (
     <div
       className={cn(
-        "outline-radius-5 outline-border",
+        "outline-radius-5 relative outline-border",
         isSelected && "outline-dashed",
       )}
       onClick={(event) => {
