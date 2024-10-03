@@ -7,12 +7,13 @@ import {
   MenubarRadioItem,
   MenubarTrigger,
 } from "~/components/ui/menubar";
-import { useSelector } from "../context";
+import { useDispatch, useSelector } from "../context";
 import { SimpleLayoutElement } from "./simple-layout/simple-layout.schema";
 import { SimpleTextElement } from "./simple-text/simple-text.schema";
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { deleteElement } from "../state/reducer";
 
 type DynamicElement = SimpleLayoutElement | SimpleTextElement;
 
@@ -32,6 +33,7 @@ export function EditionTools<T extends string>({
 }: EditionToolsProps<T>) {
   if (!element) return null;
   const isSelected = useSelector((state) => state.selection) === element.id;
+  const dispatch = useDispatch();
 
   return (
     <Menubar
@@ -64,7 +66,7 @@ export function EditionTools<T extends string>({
       <MenubarMenu>
         <MenubarTrigger
           onClick={(event) => {
-            // dispatch(deleteElement(element.id));
+            dispatch(deleteElement(element.id));
           }}
         >
           <TrashIcon />

@@ -39,6 +39,44 @@ export const updateElement =
     };
   };
 
+export const removeElement =
+  (id: string) =>
+  (state: CvBuilderState): CvBuilderState => {
+    if (id === state.schema.rootElement) return state;
+
+    const elements = state.schema.elements;
+    let newElements: Record<string, AnyElement> = {};
+    for (let key in elements) {
+      const el = elements[key];
+      if (!el || el?.id === id) continue;
+      if (el.slots && el.slots.children.indexOf(id) > -1) {
+        let newChildren = [...el.slots.children];
+        const index = newChildren.indexOf(id, 0);
+        if (index > -1) {
+          newChildren.splice(index, 1);
+        }
+        newElements[el.id] = {
+          ...el,
+          slots: { ...el.slots, children: newChildren },
+        };
+        continue;
+      }
+      newElements[el.id] = el;
+    }
+
+    let newState = { ...state };
+    const element = state.schema.elements[id];
+    for (let el in element?.slots) newState = removeElement(el)(newState); //recursively removes children
+
+    return {
+      ...newState,
+      schema: {
+        ...state.schema,
+        elements: newElements,
+      },
+    };
+  };
+
 export type Reducer = (
   state: CvBuilderState,
   action: AnyAction,
@@ -67,6 +105,24 @@ const selectionReducer: Reducer = (state, action) => {
   }
 };
 
+const DeleteElement = Symbol.for("DeleteElement");
+export const deleteElement = (id: string) =>
+  ({
+    type: DeleteElement,
+    payload: { id },
+  }) as const;
+type DeleteElementAction = ReturnType<typeof deleteElement>;
+
+const elementReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case DeleteElement: {
+      return removeElement(action.payload.id);
+    }
+    default:
+      return state;
+  }
+};
+
 const Zoom = Symbol.for("Zoom");
 export const zoom = (multiplier: number) => {
   return { type: Zoom, payload: { multiplier } } as const;
@@ -79,7 +135,6 @@ const ZoomReducer: Reducer = (state, action) => {
       if (action.payload.multiplier <= 0) {
         // TODO: deal with that error
       }
-      console.debug(state);
       return { ...state, zoom: state.zoom * action.payload.multiplier };
     }
     default:
@@ -110,6 +165,7 @@ export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
   | FocusElementAction
+  | DeleteElementAction
   | ZoomAction
   | SetFormatAction;
 
@@ -121,6 +177,7 @@ export const cvStateReducer = (
     simpleTextReducer,
     simpleLayoutReducer,
     selectionReducer,
+    elementReducer,
     ZoomReducer,
     FormatReducer,
   ];
