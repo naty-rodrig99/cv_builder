@@ -34,6 +34,7 @@ export function EditionTools<T extends string>({
   if (!element) return null;
   const isSelected = useSelector((state) => state.selection) === element.id;
   const dispatch = useDispatch();
+  const rootElement = useSelector((state) => state.schema.rootElement);
 
   return (
     <Menubar
@@ -63,15 +64,17 @@ export function EditionTools<T extends string>({
           </MenubarContent>
         </MenubarMenu>
       ))}
-      <MenubarMenu>
-        <MenubarTrigger
-          onClick={(event) => {
-            dispatch(deleteElement(element.id));
-          }}
-        >
-          <TrashIcon />
-        </MenubarTrigger>
-      </MenubarMenu>
+      {element.id !== rootElement ? (
+        <MenubarMenu>
+          <MenubarTrigger
+            onClick={() => {
+              dispatch(deleteElement(element.id));
+            }}
+          >
+            <TrashIcon />
+          </MenubarTrigger>
+        </MenubarMenu>
+      ) : null}
     </Menubar>
   );
 }
