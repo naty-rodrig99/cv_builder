@@ -45,29 +45,21 @@ export function EditionTools<T extends string>({
       {/* TODO: make this a user friendly name*/}
       <Separator orientation="vertical" />
       {options.map(({ optionName, optionList, action, optionDefault }) => (
-        <div key={element.id + optionName}>
-          <MenubarMenu>
-            <MenubarTrigger>{optionName}</MenubarTrigger>
-            <MenubarContent>
-              <MenubarRadioGroup
-                value={optionDefault}
-                onValueChange={
-                  action ? (value) => action(value as T) : () => {}
-                }
-              >
-                {optionList.map((op) => (
-                  <MenubarRadioItem
-                    key={element.id + optionName + op}
-                    value={op}
-                  >
-                    {op}
-                  </MenubarRadioItem>
-                ))}
-              </MenubarRadioGroup>
-            </MenubarContent>
-          </MenubarMenu>
-          <Separator orientation="vertical" />
-        </div>
+        <MenubarMenu key={element.id + optionName}>
+          <MenubarTrigger>{optionName}</MenubarTrigger>
+          <MenubarContent>
+            <MenubarRadioGroup
+              value={optionDefault}
+              onValueChange={action ? (value) => action(value as T) : () => {}}
+            >
+              {optionList.map((op) => (
+                <MenubarRadioItem key={element.id + optionName + op} value={op}>
+                  {op}
+                </MenubarRadioItem>
+              ))}
+            </MenubarRadioGroup>
+          </MenubarContent>
+        </MenubarMenu>
       ))}
       <MenubarMenu>
         <MenubarTrigger
