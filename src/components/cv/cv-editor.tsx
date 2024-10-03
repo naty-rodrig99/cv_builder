@@ -109,7 +109,7 @@ const FormatSelector = () => {
       </PopoverTrigger>
       <PopoverContent className={cn("w-fit", "p-1")}>
         {cvFormats.map((type, i) => (
-          <>
+          <div key={"fs" + i}>
             {i > 0 ? <Separator /> : <></>}
             <Label
               onClick={() => dispatch(setFormat(type))}
@@ -123,7 +123,7 @@ const FormatSelector = () => {
             >
               {type}
             </Label>
-          </>
+          </div>
         ))}
       </PopoverContent>
     </Popover>

@@ -40,7 +40,7 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
         })}
       >
         {element.slots.children.map((id, index) => (
-          <>
+          <div key={"smpl-lyt-edit"+index}>
             <DropZone
               id={id + "-previous-dropzone"}
               onDrop={(event) => {
@@ -49,7 +49,7 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
               }}
             ></DropZone>
             <DynamicElementEdit key={id} elementId={id} />
-          </>
+          </div>
         ))}
         <DropZone
           id={element.id + "-final-dropzone"}

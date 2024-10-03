@@ -1,6 +1,7 @@
 import { Reducer, updateElement } from "~/components/cv/state/reducer";
 import { AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
+import { SimpleLayoutDirections } from "./simple-layout.schema";
 
 const SetDirection = Symbol.for("SetDirection");
 export const setDirection = (id: string, direction: SimpleLayoutDirections) =>
