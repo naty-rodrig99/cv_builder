@@ -3,10 +3,7 @@ import { AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
 
 const SetDirection = Symbol.for("SetDirection");
-export const setDirection = (
-  id: string,
-  direction: "vertical" | "horizontal",
-) =>
+export const setDirection = (id: string, direction: SimpleLayoutDirections) =>
   ({
     type: SetDirection,
     payload: { id, direction },

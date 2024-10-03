@@ -3,6 +3,7 @@ import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-t
 import { useDispatch } from "~/components/cv/context";
 import { setText } from "./simple-text.state";
 import { Textarea } from "~/components/ui/textarea";
+import { EditionTools } from "../EditorTools";
 
 export interface SimpleTextEditProps {
   element: SimpleTextElement;
@@ -22,18 +23,21 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   }, [value]);
 
   return (
-    <div className="relative p-2">
-      <Textarea
-        className="w-full resize-none border-none shadow-none bg-green-50"
-        ref={textAreaRef}
-        value={element.data.text}
-        defaultValue={"Your text here"}
-        onChange={(event) => {
-          dispatch(setText(element.id, event.target.value));
-          onChange(event);
-        }}
-      />
-    </div>
+    <>
+      <EditionTools element={element} options={[]} />
+      <div className="relative p-2">
+        <Textarea
+          className="w-full resize-none border-none bg-green-50 shadow-none"
+          ref={textAreaRef}
+          value={element.data.text}
+          defaultValue={"Your text here"}
+          onChange={(event) => {
+            dispatch(setText(element.id, event.target.value));
+            onChange(event);
+          }}
+        />
+      </div>
+    </>
   );
 };
 

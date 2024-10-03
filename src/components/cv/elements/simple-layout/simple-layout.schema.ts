@@ -1,6 +1,9 @@
 import * as z from "zod";
 import { abstractElement } from "../../abstract-element";
 
+export const SIMPLE_LAYOUT_DIRECTIONS = ["vertical", "horizontal"];
+export type SimpleLayoutDirections = (typeof SIMPLE_LAYOUT_DIRECTIONS)[number];
+
 export const simpleLayoutElement = abstractElement.extend({
   type: z.literal("simple-layout"),
   options: z.object({
