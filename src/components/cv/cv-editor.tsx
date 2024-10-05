@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import React, { useId, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -9,7 +8,7 @@ import {
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
 import { H1, H3, P } from "~/components/ui/typography";
-import { cvFormats, CvSchema } from "~/components/cv/schema";
+import { AnyElement, cvFormats, CvSchema } from "~/components/cv/schema";
 import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { useCvEditorState } from "~/components/cv/state/use-cv-editor-state";
 import {
@@ -17,7 +16,8 @@ import {
   useDispatch,
   useSelector,
 } from "~/components/cv/context";
-import { cn, format2aspectRatio } from "~/lib/utils";
+import { DndContext, DragOverlay, useDraggable } from "@dnd-kit/core";
+import { cn } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
 import { setFormat, zoom } from "./state/reducer";
@@ -27,6 +27,26 @@ import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { routeProjectExport } from "~/app/routes";
 import Paper from "~/components/paper";
+import DynamicElementPreview from "./elements/dynamic-element.preview";
+
+const ELEMENT_LIST = ["simple-layout", "simple-text"] as const;
+
+interface DraggableProps {
+  type: (typeof ELEMENT_LIST)[number];
+  children: React.ReactNode;
+}
+const Draggable = ({ type, children }: DraggableProps) => {
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: type,
+    data: { type: type },
+  });
+
+  return (
+    <button ref={setNodeRef} {...listeners} {...attributes}>
+      {children}
+    </button>
+  );
+};
 
 const ElementPanel = () => {
   return (
@@ -35,38 +55,21 @@ const ElementPanel = () => {
       <P>Todo: Enable drag and drop, creating new elements, etc.</P>
       <br />
       <ul className="flex flex-col gap-4">
-        <li>
-          <Card>
-            <CardHeader>
-              <CardTitle>Simple Layout</CardTitle>
-            </CardHeader>
-            <CardContent>
-              Simple concatenating layout. Choose between vertical and
-              horizontal direction.
-            </CardContent>
-          </Card>
-        </li>
-        <li>
-          <Card>
-            <CardHeader>
-              <CardTitle>Simple Text</CardTitle>
-            </CardHeader>
-            <CardContent>A very simple text element.</CardContent>
-          </Card>
-        </li>
-      </ul>
-      <ul>
-        {[...Array(25)].map((e, i) => (
-          <>
-            <div key={e}>Add Component here</div>
-          </>
-        ))}
+        {ELEMENT_LIST.map((type) => {
+          return (
+            <li key={type}>
+              <Draggable type={type}>
+                <DynamicElementPreview elementType={type} />
+              </Draggable>
+            </li>
+          );
+        })}
       </ul>
     </ScrollArea>
   );
 };
 
-const PreviewPanel = () => {
+const EditPanel = () => {
   const rootElement = useSelector((state) => state.schema.rootElement);
   const format = useSelector((state) => state.schema.format);
   const zoom = useSelector((state) => state.zoom);
@@ -122,7 +125,7 @@ const FormatSelector = () => {
       </PopoverTrigger>
       <PopoverContent className={cn("w-fit", "p-1")}>
         {cvFormats.map((type, i) => (
-          <>
+          <div key={"fs" + i}>
             {i > 0 ? <Separator /> : <></>}
             <Label
               onClick={() => dispatch(setFormat(type))}
@@ -136,7 +139,7 @@ const FormatSelector = () => {
             >
               {type}
             </Label>
-          </>
+          </div>
         ))}
       </PopoverContent>
     </Popover>
@@ -153,6 +156,9 @@ export interface CvEditorProps {
 
 const CvEditor = ({ projectId, cv }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.schema);
+  const [activeElementType, setActiveElementType] = useState<
+    AnyElement["type"] | null
+  >(null);
 
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
@@ -164,16 +170,29 @@ const CvEditor = ({ projectId, cv }: CvEditorProps) => {
             <Link href={routeProjectExport(projectId)}>Export</Link>
           </Button>
         </header>
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={33}>
-            <ElementPanel />
-          </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel defaultSize={67}>
-            <PreviewPanel />
-            <ZoomButtons />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        <DndContext
+          id={useId()}
+          onDragStart={(event) => {
+            setActiveElementType(event.active.id as AnyElement["type"]);
+          }}
+          onDragEnd={() => setActiveElementType(null)}
+        >
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel defaultSize={33}>
+              <ElementPanel />
+            </ResizablePanel>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={67}>
+              <EditPanel />
+              <ZoomButtons />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+          <DragOverlay>
+            {activeElementType ? (
+              <DynamicElementPreview elementType={activeElementType} />
+            ) : null}
+          </DragOverlay>
+        </DndContext>
       </div>
     </CvBuilderContextProvider>
   );

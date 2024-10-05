@@ -1,20 +1,20 @@
 import React from "react";
-import './text-edit-styles.css';
+import "./text-edit-styles.css";
 import { Textarea } from "~/components/ui/textarea";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { useDispatch } from "~/components/cv/context";
 import { setText } from "./simple-text.state";
+import { EditionTools } from "../EditorTools";
 
-import {LexicalComposer} from '@lexical/react/LexicalComposer';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
 import { EditorState } from "lexical";
 
-import SimpleTextOnChangePlugin from './simple-text-onchange'
-import ToolbarTextEdit from './toolbar-text.edit';
-
+import SimpleTextOnChangePlugin from "./simple-text-onchange";
+import ToolbarTextEdit from "./toolbar-text.edit";
 
 export interface SimpleTextEditProps {
   element: SimpleTextElement;
@@ -33,11 +33,11 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
   }, [value]);
 
-  const placeholder = 'Enter some rich text...';
+  const placeholder = "Enter some rich text...";
 
   const editorConfig = {
     editable: true, //edit mode
-    namespace: 'Rich Text Editor',
+    namespace: "Rich Text Editor",
     nodes: [],
     onError(error: Error) {
       throw error;
@@ -53,37 +53,40 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   };
 
   return (
-    <div className="relative p-2">
-      <Textarea
-        className="w-full resize-none border-none shadow-none"
-        ref={textAreaRef}
-        value={element.data.text}
-        onChange={(event) => {
-          dispatch(setText(element.id, event.target.value));
-          onChange(event);
-        }}
-      />
-    <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
-        <ToolbarTextEdit />
-        <div className="editor-inner">
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable
-                className="editor-input"
-                aria-placeholder={placeholder}
-                placeholder={
-                  <div className="editor-placeholder">{placeholder}</div>
+    <>
+      <EditionTools element={element} options={[]} />
+      <div className="relative p-2">
+        <Textarea
+          className="w-full resize-none border-none bg-green-50 shadow-none"
+          ref={textAreaRef}
+          value={element.data.text}
+          onChange={(event) => {
+            dispatch(setText(element.id, event.target.value));
+            onChange(event);
+          }}
+        />
+        <LexicalComposer initialConfig={editorConfig}>
+          <div className="editor-container">
+            <ToolbarTextEdit />
+            <div className="editor-inner">
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable
+                    className="editor-input"
+                    aria-placeholder={placeholder}
+                    placeholder={
+                      <div className="editor-placeholder">{placeholder}</div>
+                    }
+                  />
                 }
+                ErrorBoundary={LexicalErrorBoundary}
               />
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <SimpleTextOnChangePlugin onChange={textEdited}/>
-        </div>
+              <SimpleTextOnChangePlugin onChange={textEdited} />
+            </div>
+          </div>
+        </LexicalComposer>
       </div>
-    </LexicalComposer>
-    </div>
+    </>
   );
 };
 
