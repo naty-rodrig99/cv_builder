@@ -152,9 +152,10 @@ export interface CvEditorProps {
     name: string;
     schema: CvSchema;
   };
+  onSave?: (schema: CvSchema) => void;
 }
 
-const CvEditor = ({ projectId, cv }: CvEditorProps) => {
+const CvEditor = ({ projectId, cv, onSave }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
@@ -166,6 +167,9 @@ const CvEditor = ({ projectId, cv }: CvEditorProps) => {
         <header className="flex flex-row justify-between p-8">
           <H1>{cv.name}</H1>
           <FormatSelector />
+          <Button variant="secondary" onClick={() => onSave?.(state.schema)}>
+            Save
+          </Button>
           <Button asChild>
             <Link href={routeProjectExport(projectId)}>Export</Link>
           </Button>

@@ -5,6 +5,7 @@ import { routeLogin, routeProject } from "~/app/routes";
 import CvEditor from "~/components/cv/cv-editor";
 import { newSchema } from "~/components/cv/schema.template";
 import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
+import { saveCvSchema } from "~/app/projects/actions";
 
 interface ProjectPageProps extends PageProps {
   params: { projectId: string };
@@ -35,7 +36,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main className="flex h-screen w-full flex-col items-center bg-background px-4">
-      <CvEditor projectId={projectId} cv={cvData} />
+      <CvEditor
+        projectId={projectId}
+        cv={cvData}
+        onSave={async (schema) => {
+          "use server";
+          await saveCvSchema(projectId, schema);
+        }}
+      />
     </main>
   );
 }
