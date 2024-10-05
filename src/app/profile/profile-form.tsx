@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { fetchUser, saveProfile, UserProfile } from "./actions";
+import { saveProfile, UserProfile } from "./actions";
 
 import {
   Card,
@@ -29,35 +29,6 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
     address: profileData.address,
     aboutMe: profileData.aboutMe,
   });
-
-  /*
-  // UseEffect to fetch data when the component mounts
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const result = await fetchUser();
-      console.log("result fetchProfileData: ", result);
-
-      if (!result.ok) {
-        console.log("Handle Error from useEffect");
-      } else {
-        // Check if birthDate is a valid date string before formatting
-        const birthDate = result.value.birthDate;
-
-        const formattedBirthDate = birthDate
-          ? new Date(birthDate).toISOString().split("T")[0]
-          : "yyyy-MM-dd";
-
-        setProfileData({
-          ...result.value,
-          birthDate: formattedBirthDate, // Format it to yyyy-MM-dd
-        });
-      }
-    };
-
-    void fetchProfileData();
-  }, []);
-
-  */
 
   const debouncedRequest = useDebounce(() => {
     validateAndSaveProfile();

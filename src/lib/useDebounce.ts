@@ -6,7 +6,7 @@ import { debounce, DebouncedFunc } from "lodash";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useDebounce = <Fn extends (...args: any[]) => any>(
   functionToCallback: Fn,
-) => {
+): DebouncedFunc<Fn> => {
   // creating ref that will be used for the input callback
   const ref = useRef<Fn>();
 
@@ -20,7 +20,7 @@ export const useDebounce = <Fn extends (...args: any[]) => any>(
       ref.current?.();
     };
 
-    return debounce(func, 1000) as DebouncedFunc<Fn>;
+    return debounce(func, 1000);
   }, []);
 
   return debouncedCallback;

@@ -7,7 +7,7 @@ import { userTable } from "~/server/db/schema";
 import { getUser } from "~/server/user";
 import { eq } from "drizzle-orm";
 
-const profileSchema = z.object({
+const profileSchemaDatabase = z.object({
   userId: z.string(),
   fullName: z.string().trim(),
   birthDate: z.string(),
@@ -28,7 +28,7 @@ export interface UserProfile {
 }
 
 export async function saveProfile(
-  profileData: z.infer<typeof profileSchema>,
+  profileData: z.infer<typeof profileSchemaDatabase>,
 ): ActionResult<null, { message: string; details?: unknown }> {
   try {
     const user = await getUser();
@@ -39,7 +39,7 @@ export async function saveProfile(
     }
 
     console.log("Validation passed");
-    const result = await profileSchema.safeParseAsync(profileData);
+    const result = await profileSchemaDatabase.safeParseAsync(profileData);
 
     if (!result.success) {
       console.log("safeParseAsync Failed");
