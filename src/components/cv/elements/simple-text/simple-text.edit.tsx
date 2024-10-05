@@ -4,7 +4,6 @@ import { Textarea } from "~/components/ui/textarea";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { useDispatch } from "~/components/cv/context";
 import { setText } from "./simple-text.state";
-import { Textarea } from "~/components/ui/textarea";
 
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
@@ -50,7 +49,7 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
     //converts editor state to JSON
     const editorStateJSON = editorState.toJSON();
     const editorStateString = JSON.stringify(editorStateJSON);
-    console.log("Updated Editor State JSON:", editorStateString);
+    //console.log("Updated Editor State JSON:", editorStateString);
   };
 
   return (
