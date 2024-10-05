@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { useDebounce } from "~/lib/useDebounce";
 
 interface ProfileFormProps {
   profileData: UserProfile;
@@ -58,6 +59,10 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
 
   */
 
+  const debouncedRequest = useDebounce(() => {
+    validateAndSaveProfile();
+  });
+
   const validateAndSaveProfile = async () => {
     const saveResult = await saveProfile(profileData);
     if (!saveResult.ok) {
@@ -75,7 +80,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
           ? new Date(value).toISOString().split("T")[0]
           : value, // Handle conversion if necessary
     }));
-    void validateAndSaveProfile();
+    debouncedRequest();
   };
 
   // Get today's date in YYYY-MM-DD format for the max attribute
