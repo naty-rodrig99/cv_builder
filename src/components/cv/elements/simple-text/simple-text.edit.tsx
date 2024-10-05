@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './text-edit-styles.css';
 import { Textarea } from "~/components/ui/textarea";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
@@ -7,13 +7,13 @@ import { useDispatch } from "~/components/cv/context";
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
 import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
 import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
 
 import { EditorState } from "lexical";
 
 import SimpleTextOnChangePlugin from './simple-text-onchange'
 import ToolbarTextEdit from './toolbar-text.edit';
+
 
 export interface SimpleTextEditProps {
   element: SimpleTextElement;
@@ -33,20 +33,13 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
     },
   };
 
-  const [editorState, setEditorState] = useState<EditorState | null>(null);
-  function textEdited() {
-    if (editorState && typeof editorState.toJSON === 'function') {
-      //creates JSON
-      const editorStateJSON = editorState.toJSON();
-      //convert to a string
-      const editorStateString = JSON.stringify(editorStateJSON);
-
-      console.log("Updated Editor State JSON:", editorStateString);
-    } else {
-      console.warn("Editor state is undefined or invalid");
-    }
-  }
-
+  //define editorState type as EditorState from Lexical
+  const textEdited = (editorState: EditorState) => {
+    //converts editor state to JSON
+    const editorStateJSON = editorState.toJSON();
+    const editorStateString = JSON.stringify(editorStateJSON);
+    console.log("Updated Editor State JSON:", editorStateString);
+  };
 
   return (
     <div className="relative p-2">
@@ -73,7 +66,6 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
             }
             ErrorBoundary={LexicalErrorBoundary}
           />
-          <HistoryPlugin />
           <SimpleTextOnChangePlugin onChange={textEdited}/>
         </div>
       </div>
