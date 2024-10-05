@@ -15,19 +15,21 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-const ProfileForm: React.FC = () => {
-  const [profileData, setProfileData] = useState<UserProfile>({
-    userId: "",
-    fullName: "",
-    birthDate: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
-    aboutMe: "",
+interface ProfileFormProps {
+  profileData: UserProfile;
+}
+
+const ProfileForm = ({ profileData }: ProfileFormProps) => {
+  const [formProfileData, setFormProfileData] = useState({
+    fullName: profileData.fullName,
+    birthDate: profileData.birthDate,
+    phoneNumber: profileData.phoneNumber,
+    email: profileData.email,
+    address: profileData.address,
+    aboutMe: profileData.aboutMe,
   });
 
-  const [errors, setErrors] = useState<string[]>([]);
-
+  /*
   // UseEffect to fetch data when the component mounts
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -54,40 +56,19 @@ const ProfileForm: React.FC = () => {
     void fetchProfileData();
   }, []);
 
+  */
+
   const validateAndSaveProfile = async () => {
     const saveResult = await saveProfile(profileData);
     if (!saveResult.ok) {
       console.error("Failed to save profile data", saveResult.error);
-
-      // Initialize an array for error messages
-      const errorMessages: string[] = [];
-
-      // Check if there's a message and push it to errorMessages
-      if (saveResult.error.message) {
-        errorMessages.push(saveResult.error.message);
-      }
-
-      // Check if there are field-specific errors
-      if (saveResult.error.details?.fieldErrors) {
-        const fieldErrors = saveResult.error.details.fieldErrors;
-        for (const [field, messages] of Object.entries(fieldErrors)) {
-          // Assuming you want to show the first error message for the field
-          errorMessages.push(`${messages[0]}`); // You can adjust this to show all messages if needed
-          break; // Exit the loop after adding the first field error
-        }
-      }
-
-      // Set the errors state to display the first error message
-      setErrors(errorMessages);
     } else {
       console.log("Profile saved successfully.");
-
-      setErrors([]); // Clear errors if saved successfully
     }
   };
 
   const updateProfileField = (field: string, value: string) => {
-    setProfileData((prev) => ({
+    setFormProfileData((prev) => ({
       ...prev,
       [field]:
         field === "birthDate"
@@ -113,7 +94,7 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="fullName">Full Name</Label>
           <Input
             type="text"
-            value={profileData.fullName}
+            value={formProfileData.fullName}
             placeholder="Full Name"
             onChange={(e) => updateProfileField("fullName", e.target.value)}
           />
@@ -123,7 +104,7 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="birthDate">Birth Date</Label>
           <input
             type="date"
-            value={profileData.birthDate}
+            value={formProfileData.birthDate}
             placeholder="Birth Date"
             max={today}
             onChange={(e) => updateProfileField("birthDate", e.target.value)}
@@ -134,7 +115,7 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="phoneNumber">Phone Number</Label>
           <Input
             type="text"
-            value={profileData.phoneNumber}
+            value={formProfileData.phoneNumber}
             placeholder="Phone Number"
             onChange={(e) => updateProfileField("phoneNumber", e.target.value)}
           />
@@ -144,7 +125,7 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="email">Email</Label>
           <Input
             type="email"
-            value={profileData.email}
+            value={formProfileData.email}
             placeholder="Email"
             onChange={(e) => updateProfileField("email", e.target.value)}
           />
@@ -154,7 +135,7 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="address">Address</Label>
           <Input
             type="text"
-            value={profileData.address}
+            value={formProfileData.address}
             placeholder="Address"
             onChange={(e) => updateProfileField("address", e.target.value)}
           />
@@ -163,19 +144,13 @@ const ProfileForm: React.FC = () => {
         <div className="grid gap-2">
           <Label htmlFor="aboutMe">About Me</Label>
           <Textarea
-            value={profileData.aboutMe}
+            value={formProfileData.aboutMe}
             placeholder="About Me"
             onChange={(e) => updateProfileField("aboutMe", e.target.value)}
           />
         </div>
 
-        {errors.length > 0 && (
-          <div style={{ color: "red" }}>
-            {errors.map((error, idx) => (
-              <p key={idx}>{error}</p>
-            ))}
-          </div>
-        )}
+        <div>Placeholder for errors</div>
       </CardContent>
     </Card>
   );

@@ -12,7 +12,7 @@ const profileSchema = z.object({
   fullName: z.string().trim(),
   birthDate: z.string(),
   phoneNumber: z.string(),
-  email: z.string().email("Invalid email"),
+  email: z.string(),
   address: z.string(),
   aboutMe: z.string(),
 });
@@ -89,31 +89,26 @@ export async function fetchUser(): ActionResult<
       return actionError({ message: "Not authenticated!" });
     }
 
-    const profileData = await db
-      .select({
-        userId: userTable.id,
-        fullName: userTable.fullName,
-        birthDate: userTable.birthDate,
-        phoneNumber: userTable.phoneNumber,
-        email: userTable.email,
-        address: userTable.address,
-        aboutMe: userTable.aboutMe,
-      })
-      .from(userTable)
-      .where(eq(userTable.id, user.id));
+    const profileData = await db.query.userTable.findFirst({
+      where: eq(userTable.id, user.id),
+    });
 
     // Convert birthDate to string for the UserProfile interface
-    const userProfile: UserProfile = {
-      userId: profileData[0].userId,
-      fullName: profileData[0].fullName || "",
-      birthDate: profileData[0].birthDate
-        ? new Date(profileData[0].birthDate).toISOString().split("T")[0]
+    if (!profileData) {
+      return actionError({ message: "404 Error" });
+    }
+
+    const userProfile = {
+      userId: profileData.id,
+      fullName: profileData.fullName ?? "",
+      birthDate: profileData.birthDate
+        ? (new Date(profileData.birthDate).toISOString().split("T")[0] ?? "") // Todo Validate birthdate string
         : "",
-      phoneNumber: profileData[0].phoneNumber || "",
-      email: profileData[0].email || "",
-      address: profileData[0].address || "",
-      aboutMe: profileData[0].aboutMe || "",
-    };
+      phoneNumber: profileData.phoneNumber ?? "",
+      email: profileData.email ?? "",
+      address: profileData.address ?? "",
+      aboutMe: profileData.aboutMe ?? "",
+    } satisfies UserProfile;
 
     return actionOk(userProfile);
   } catch (error) {
