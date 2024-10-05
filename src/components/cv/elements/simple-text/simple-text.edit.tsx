@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import './text-edit-styles.css';
 import { Textarea } from "~/components/ui/textarea";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { useDispatch } from "~/components/cv/context";
+import { setText } from "./simple-text.state";
+import { Textarea } from "~/components/ui/textarea";
 
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
@@ -21,6 +23,16 @@ export interface SimpleTextEditProps {
 
 const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   const dispatch = useDispatch();
+  const textAreaRef: any = React.useRef(null);
+  const [value, setValue] = React.useState("");
+  const onChange = (event: any) => setValue(event.target.value);
+
+  React.useLayoutEffect(() => {
+    // Reset height - important to shrink on delete
+    textAreaRef.current.style.height = "inherit";
+    // Set height
+    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  }, [value]);
 
   const placeholder = 'Enter some rich text...';
 
@@ -44,10 +56,12 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   return (
     <div className="relative p-2">
       <Textarea
-        className="w-full"
+        className="w-full resize-none border-none shadow-none"
+        ref={textAreaRef}
         value={element.data.text}
         onChange={(event) => {
-          // TODO: dispatch(updateTextElementText(event.target.value));
+          dispatch(setText(element.id, event.target.value));
+          onChange(event);
         }}
       />
     <LexicalComposer initialConfig={editorConfig}>
