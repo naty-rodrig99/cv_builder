@@ -12,8 +12,9 @@ import { SimpleLayoutElement } from "./simple-layout/simple-layout.schema";
 import { SimpleTextElement } from "./simple-text/simple-text.schema";
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
-import { TrashIcon } from "@radix-ui/react-icons";
+import { TrashIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { deleteElement } from "../state/reducer";
+import { retrieveElementContext } from "./element-context";
 
 type DynamicElement = SimpleLayoutElement | SimpleTextElement;
 
@@ -36,12 +37,22 @@ export function EditionTools<T extends string>({
   const dispatch = useDispatch();
   const rootElement = useSelector((state) => state.schema.rootElement);
 
+  const { listeners, setActivatorNodeRef } = retrieveElementContext(element.id);
+
   return (
     <Menubar
-      className={cn(
-        (isSelected && "absolute -top-10 z-40") || "hidden",
-      )}
+      className={cn((isSelected && "absolute -top-10 z-40") || "hidden")}
     >
+      {element.id !== rootElement ? (
+        <>
+          <MenubarMenu>
+            <div ref={setActivatorNodeRef} {...listeners}>
+              <DragHandleDots2Icon />
+            </div>
+          </MenubarMenu>
+          <Separator orientation="vertical" />
+        </>
+      ) : null}
       <MenubarMenu>
         <MenubarLabel className="flex cursor-default select-none items-center whitespace-nowrap rounded-sm px-3 py-1 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
           {element.type}

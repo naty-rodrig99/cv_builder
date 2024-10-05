@@ -1,4 +1,9 @@
-import { Reducer, updateElement } from "~/components/cv/state/reducer";
+import {
+  CvBuilderState,
+  Reducer,
+  removeFromParent,
+  updateElement,
+} from "~/components/cv/state/reducer";
 import { AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
 import { SimpleLayoutDirections } from "./simple-layout.schema";
@@ -11,30 +16,34 @@ export const setDirection = (id: string, direction: SimpleLayoutDirections) =>
   }) as const;
 type SetTextAction = ReturnType<typeof setDirection>;
 
-const PrependNewElement = Symbol.for("PrependNewElement");
-export const prependNewElement = (
+const InsertNewElement = Symbol.for("InsertNewElement");
+export const insertNewElement = (
   id: string,
   elementType: AnyElement["type"],
   index: number,
 ) =>
   ({
-    type: PrependNewElement,
+    type: InsertNewElement,
     payload: { id, elementType, index },
   }) as const;
-type PrependNewElementAction = ReturnType<typeof prependNewElement>;
+type InsertNewElementAction = ReturnType<typeof insertNewElement>;
 
-const AppendNewElement = Symbol.for("AppendNewElement");
-export const appendNewElement = (id: string, elementType: AnyElement["type"]) =>
+const MoveElement = Symbol.for("MoveElement");
+export const moveElement = (
+  targetId: string,
+  sourceId: string,
+  index: number,
+) =>
   ({
-    type: AppendNewElement,
-    payload: { id, elementType },
+    type: MoveElement,
+    payload: { targetId, sourceId, index },
   }) as const;
-type AppendNewElementAction = ReturnType<typeof appendNewElement>;
+type MoveElementAction = ReturnType<typeof moveElement>;
 
 export type SimpleLayoutActions =
   | SetTextAction
-  | AppendNewElementAction
-  | PrependNewElementAction;
+  | InsertNewElementAction
+  | MoveElementAction;
 
 export const simpleLayoutReducer: Reducer = (state, action) => {
   switch (action.type) {
@@ -44,21 +53,14 @@ export const simpleLayoutReducer: Reducer = (state, action) => {
         options: { ...el.options, direction: action.payload.direction },
       }));
     }
-    case PrependNewElement: {
+    case InsertNewElement: {
       const newElementTemplate = createElement(action.payload.elementType);
       if (!newElementTemplate) return state;
       const [newElement, elements] = newElementTemplate;
-      const nextState = updateElement(
-        "simple-layout",
+      const nextState = insertElement(
+        newElement.id,
         action.payload.id,
-        (el) => {
-          const newChildren = [...el.slots!.children];
-          newChildren.splice(action.payload.index, 0, newElement.id);
-          return {
-            ...el,
-            slots: { children: newChildren },
-          };
-        },
+        action.payload.index,
       )(state);
       return {
         ...nextState,
@@ -68,27 +70,41 @@ export const simpleLayoutReducer: Reducer = (state, action) => {
         },
       };
     }
-    case AppendNewElement: {
-      const newElementTemplate = createElement(action.payload.elementType);
-      if (!newElementTemplate) return state;
-      const [newElement, elements] = newElementTemplate;
-      const nextState = updateElement(
-        "simple-layout",
-        action.payload.id,
-        (el) => ({
-          ...el,
-          slots: { children: [...el.slots!.children, newElement.id] },
-        }),
-      )(state);
+    case MoveElement: {
+      if (action.payload.sourceId === state.schema.rootElement) return state;
+      const index =
+        state.schema.elements[
+          action.payload.targetId
+        ]?.slots!?.children.indexOf(action.payload.sourceId) <
+        action.payload.index
+          ? action.payload.index - 1
+          : action.payload.index;
+      const nextState = insertElement(
+        action.payload.sourceId,
+        action.payload.targetId,
+        index,
+      )(removeFromParent(action.payload.sourceId)(state));
       return {
         ...nextState,
-        schema: {
-          ...nextState.schema,
-          elements: { ...nextState.schema.elements, ...elements },
-        },
       };
     }
     default:
       return state;
   }
+};
+
+const insertElement = (
+  elementId: string,
+  parentId: string,
+  index: number,
+): ((state: CvBuilderState) => CvBuilderState) => {
+  return updateElement("simple-layout", parentId, (el) => {
+    const newChildren = [...el.slots!.children];
+    console.log(newChildren);
+    newChildren.splice(index, 0, elementId);
+    return {
+      ...el,
+      slots: { children: newChildren },
+    };
+  });
 };

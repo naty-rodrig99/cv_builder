@@ -1,29 +1,9 @@
 import {
   DragEndEvent,
   useDndMonitor,
-  useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
-
-interface DraggableProps<E extends string> {
-  id: E;
-  children: React.ReactNode;
-}
-export const Draggable = <E extends string>({
-  id,
-  children,
-}: DraggableProps<E>) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: id,
-  });
-
-  return (
-    <button ref={setNodeRef} {...listeners} {...attributes}>
-      {children}
-    </button>
-  );
-};
 
 interface DroppableProps<E extends string> {
   id: E;
@@ -57,12 +37,12 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
     },
   });
   return (
-    <div id={id} className={cn("relative", "w-full")}>
+    <div id={id} className={cn("relative z-20 w-full")}>
       <div
         ref={setNodeRef}
         className={cn(
-          "outline-radius-5 absolute left-0 right-0 top-0 h-[24px] invisible",
-          isOver && "outline-dashed outline-border visible",
+          "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[24px]",
+          isOver && "visible outline-dashed outline-border",
         )}
       />
     </div>

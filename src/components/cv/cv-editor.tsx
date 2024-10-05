@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -16,8 +16,7 @@ import {
   useDispatch,
   useSelector,
 } from "~/components/cv/context";
-import { Draggable } from "~/components/drag-n-drop";
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+import { DndContext, DragOverlay, useDraggable } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
@@ -32,6 +31,23 @@ import DynamicElementPreview from "./elements/dynamic-element.preview";
 
 const ELEMENT_LIST = ["simple-layout", "simple-text"] as const;
 
+interface DraggableProps {
+  type: (typeof ELEMENT_LIST)[number];
+  children: React.ReactNode;
+}
+const Draggable = ({ type, children }: DraggableProps) => {
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: type,
+    data: { type: type },
+  });
+
+  return (
+    <button ref={setNodeRef} {...listeners} {...attributes}>
+      {children}
+    </button>
+  );
+};
+
 const ElementPanel = () => {
   return (
     <ScrollArea className={cn("size-full", "p-8")}>
@@ -42,7 +58,7 @@ const ElementPanel = () => {
         {ELEMENT_LIST.map((type) => {
           return (
             <li key={type}>
-              <Draggable id={type}>
+              <Draggable type={type}>
                 <DynamicElementPreview elementType={type} />
               </Draggable>
             </li>
@@ -155,6 +171,7 @@ const CvEditor = ({ projectId, cv }: CvEditorProps) => {
           </Button>
         </header>
         <DndContext
+          id={useId()}
           onDragStart={(event) => {
             setActiveElementType(event.active.id as AnyElement["type"]);
           }}

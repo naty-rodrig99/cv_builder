@@ -39,13 +39,13 @@ export const updateElement =
     };
   };
 
-export const removeElement =
+export const removeFromParent =
   (id: string) =>
   (state: CvBuilderState): CvBuilderState => {
     if (id === state.schema.rootElement) return state;
 
     const elements = state.schema.elements;
-    let newElements: Record<string, AnyElement> = {};
+    let newElements: Record<string, AnyElement> = { ...elements };
     for (let key in elements) {
       const el = elements[key];
       if (!el || el?.id === id) continue;
@@ -59,13 +59,29 @@ export const removeElement =
           ...el,
           slots: { ...el.slots, children: newChildren },
         };
-        continue;
       }
-      newElements[el.id] = el;
     }
 
-    let newState = { ...state };
+    return {
+      ...state,
+      schema: {
+        ...state.schema,
+        elements: newElements,
+      },
+    };
+  };
+
+const removeSelf =
+  (id: string) =>
+  (state: CvBuilderState): CvBuilderState => {
+    if (id === state.schema.rootElement) return state;
     const element = state.schema.elements[id];
+
+    const elements = state.schema.elements;
+    let newElements: Record<string, AnyElement> = { ...elements };
+    delete newElements[id];
+
+    let newState = { ...state };
     for (let el in element?.slots) newState = removeElement(el)(newState); //recursively removes children
 
     return {
@@ -75,6 +91,14 @@ export const removeElement =
         elements: newElements,
       },
     };
+  };
+
+export const removeElement =
+  (id: string) =>
+  (state: CvBuilderState): CvBuilderState => {
+    if (id === state.schema.rootElement) return state;
+
+    return removeSelf(id)(removeFromParent(id)(state));
   };
 
 export type Reducer = (

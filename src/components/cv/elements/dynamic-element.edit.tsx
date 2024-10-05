@@ -5,6 +5,8 @@ import { selectElement } from "~/components/cv/state/selectors";
 import { useDispatch, useSelector } from "~/components/cv/context";
 import { cn } from "~/lib/utils";
 import { focusElement } from "../state/reducer";
+import { useDraggable } from "@dnd-kit/core";
+import { ElementContextProvider } from "./element-context";
 
 export interface DynamicElementEditProps {
   elementId: string;
@@ -26,19 +28,34 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       break;
     default:
   }
+
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef } =
+    useDraggable({
+      id: element.id,
+      data: { elementId: element.id },
+    });
+
   return (
-    <div
-      className={cn(
-        "outline-radius-5 relative outline-border",
-        isSelected && "outline-dashed",
-      )}
-      onClick={(event) => {
-        event.stopPropagation();
-        dispatch(focusElement(element.id));
-      }}
+    <ElementContextProvider
+      elementId={element.id}
+      listeners={listeners}
+      setActivatorNodeRef={setActivatorNodeRef}
     >
-      {elementComponent}
-    </div>
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        className={cn(
+          "outline-radius-5 relative outline-border",
+          isSelected && "outline-dashed",
+        )}
+        onClick={(event) => {
+          event.stopPropagation();
+          dispatch(focusElement(element.id));
+        }}
+      >
+        {elementComponent}
+      </div>
+    </ElementContextProvider>
   );
 };
 
