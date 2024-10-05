@@ -1,4 +1,4 @@
-import { PageProps } from "~/lib/page-props";
+import { type PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
 import { routeLogin, routeProject } from "~/app/routes";
@@ -39,7 +39,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <CvEditor
         projectId={projectId}
         cv={cvData}
-        onSave={async (schema) => {
+        saveAction={async (schema) => {
           "use server";
           await saveCvSchema(projectId, schema);
         }}

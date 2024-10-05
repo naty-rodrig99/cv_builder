@@ -8,7 +8,11 @@ import {
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
 import { H1, H3, P } from "~/components/ui/typography";
-import { AnyElement, cvFormats, CvSchema } from "~/components/cv/schema";
+import {
+  type AnyElement,
+  cvFormats,
+  type CvSchema,
+} from "~/components/cv/schema";
 import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { useCvEditorState } from "~/components/cv/state/use-cv-editor-state";
 import {
@@ -28,6 +32,8 @@ import Link from "next/link";
 import { routeProjectExport } from "~/app/routes";
 import Paper from "~/components/paper";
 import DynamicElementPreview from "./elements/dynamic-element.preview";
+import { toast } from "sonner";
+import { Loader2Icon } from "lucide-react";
 
 const ELEMENT_LIST = ["simple-layout", "simple-text"] as const;
 
@@ -152,14 +158,16 @@ export interface CvEditorProps {
     name: string;
     schema: CvSchema;
   };
-  onSave?: (schema: CvSchema) => void;
+  saveAction: (schema: CvSchema) => Promise<void>;
 }
 
-const CvEditor = ({ projectId, cv, onSave }: CvEditorProps) => {
+const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
   >(null);
+
+  const [savingSchema, setSavingSchema] = useState(false);
 
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
@@ -167,7 +175,31 @@ const CvEditor = ({ projectId, cv, onSave }: CvEditorProps) => {
         <header className="flex flex-row justify-between p-8">
           <H1>{cv.name}</H1>
           <FormatSelector />
-          <Button variant="secondary" onClick={() => onSave?.(state.schema)}>
+          <Button
+            variant="secondary"
+            disabled={savingSchema}
+            onClick={async () => {
+              setSavingSchema(true);
+              try {
+                await saveAction(state.schema);
+                toast.success("You can rest. Your CV is save now 😌");
+              } catch (error) {
+                console.error(error);
+                toast.error(
+                  "We could not save your CV. Please try again later.",
+                  {
+                    dismissible: true,
+                    closeButton: true,
+                  },
+                );
+              } finally {
+                setSavingSchema(false);
+              }
+            }}
+          >
+            {savingSchema && (
+              <Loader2Icon className="mr-2 size-4 animate-spin" />
+            )}
             Save
           </Button>
           <Button asChild>
