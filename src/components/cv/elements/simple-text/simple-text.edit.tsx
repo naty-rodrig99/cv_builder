@@ -25,7 +25,7 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
   const placeholder = 'Enter some rich text...';
 
   const editorConfig = {
-    editable: true,
+    editable: true, //edit mode
     namespace: 'Rich Text Editor',
     nodes: [],
     onError(error: Error) {

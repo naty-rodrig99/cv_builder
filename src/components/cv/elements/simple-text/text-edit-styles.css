@@ -60,7 +60,6 @@ h1 {
 }
 
 .editor-input {
-  min-height: 150px;
   resize: none;
   font-size: 15px;
   caret-color: rgb(5, 5, 5);
@@ -114,22 +113,6 @@ h1 {
 .editor-link {
   color: rgb(33, 111, 219);
   text-decoration: none;
-}
-
-.tree-view-output {
-  display: block;
-  background: #222;
-  color: #fff;
-  padding: 5px;
-  font-size: 12px;
-  white-space: pre-wrap;
-  margin: 1px auto 10px auto;
-  max-height: 250px;
-  position: relative;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  overflow: auto;
-  line-height: 14px;
 }
 
 .editor-code {
