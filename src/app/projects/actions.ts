@@ -7,6 +7,7 @@ import { cvTable } from "~/server/db/schema";
 import { getUser } from "~/server/user";
 import { cvSchema, CvSchema } from "~/components/cv/schema";
 import { eq } from "drizzle-orm";
+import { newSchema } from "~/components/cv/schema.template";
 
 export async function createDummyProject(): ActionResult<
   null,
@@ -26,6 +27,7 @@ export async function createDummyProject(): ActionResult<
     id: cvId,
     userId: user.id,
     cvName: "testCV" + cvId,
+    cvData: newSchema({ elements: [] }),
   };
   try {
     const result = await db.insert(cvTable).values(cvValues).returning();
