@@ -8,8 +8,9 @@ import { getUser } from "~/server/user";
 import { cvSchema, CvSchema } from "~/components/cv/schema";
 import { eq } from "drizzle-orm";
 import { newSchema } from "~/components/cv/schema.template";
+import { redirect } from "next/navigation";
 
-export async function createDummyProject(): ActionResult<
+export async function createNewProject(): ActionResult<
   null,
   { message: string; details?: unknown }
 > {
@@ -26,7 +27,7 @@ export async function createDummyProject(): ActionResult<
   const cvValues = {
     id: cvId,
     userId: user.id,
-    cvName: "testCV" + cvId,
+    cvName: "Untitled CV",
     cvData: newSchema({ elements: [] }),
   };
   try {
@@ -37,7 +38,7 @@ export async function createDummyProject(): ActionResult<
       details: cvValues,
     });
   }
-  return actionOk(null);
+  return redirect("/projects/" + cvId);
 }
 
 export async function saveCvSchema(

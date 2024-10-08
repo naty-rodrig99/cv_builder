@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
-import { createDummyProject } from "./actions";
+import { createNewProject } from "./actions";
 import Link from "next/link";
 import { routeProject } from "../routes";
 import { cn } from "~/lib/utils";
@@ -44,10 +44,10 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
       <CardFooter>
         <Button
           onClick={async () => {
-            await createDummyProject();
+            await createNewProject();
           }}
         >
-          Create one more
+          Create a new CV
         </Button>
       </CardFooter>
     </Card>
