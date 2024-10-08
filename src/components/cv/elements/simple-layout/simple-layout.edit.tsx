@@ -14,7 +14,7 @@ import {
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import { DropZone } from "~/components/drag-n-drop";
 import { AnyElement } from "../../schema";
-import { EditionTools } from "../EditorTools";
+import { EditionTools, selectOneOption } from "../EditorTools";
 
 export interface SimpleLayoutEditProps {
   element: SimpleLayoutElement;
@@ -25,16 +25,15 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
 
   return (
     <>
-      <EditionTools<SimpleLayoutDirections>
+      <EditionTools
         element={element}
         options={[
-          {
-            optionName: "Direction",
-            optionList: SIMPLE_LAYOUT_DIRECTIONS,
-            action: (direction) =>
-              dispatch(setDirection(element.id, direction)),
-            optionDefault: element.options.direction,
-          },
+          selectOneOption<SimpleLayoutDirections>(
+            "Direction",
+            SIMPLE_LAYOUT_DIRECTIONS as unknown as SimpleLayoutDirections[], // I really hate Typescript at times
+            (direction) => dispatch(setDirection(element.id, direction)),
+            element.options.direction as string,
+          ),
         ]}
       />
       <div

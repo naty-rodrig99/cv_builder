@@ -15,23 +15,93 @@ import { Separator } from "~/components/ui/separator";
 import { TrashIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { deleteElement } from "../state/reducer";
 import { retrieveElementContext } from "./element-context";
+import React from "react";
+import { AnyElement } from "../schema";
 
 type DynamicElement = SimpleLayoutElement | SimpleTextElement;
 
-interface EditionToolsProps<T extends string> {
-  element: DynamicElement;
-  options: {
-    optionName: string;
-    optionList: T[];
-    action?: (value: T) => void;
-    optionDefault?: T;
-  }[];
+type SelectOneOptions<SelOne> = {
+  type: "select-one";
+  optionName: string;
+  optionList: SelOne[];
+  action?: (value: SelOne) => void;
+  optionDefault?: string;
+};
+
+type CustomOptions = {
+  type: "custom";
+  children: React.ReactNode;
+};
+
+type Option = SelectOneOptions<any> | CustomOptions;
+
+export function selectOneOption<SelOne>(
+  optionName: string,
+  optionList: SelOne[],
+  action?: (value: SelOne) => void,
+  optionDefault?: string,
+): SelectOneOptions<SelOne> {
+  return {
+    type: "select-one",
+    optionName: optionName,
+    optionList: optionList,
+    action: action!,
+    optionDefault: optionDefault!,
+  };
 }
 
-export function EditionTools<T extends string>({
-  element,
-  options,
-}: EditionToolsProps<T>) {
+export function customOption(component: React.ReactNode): CustomOptions {
+  return {
+    type: "custom",
+    children: component,
+  };
+}
+
+interface OptionLayoutProps {
+  option: Option;
+  element: AnyElement;
+}
+const OptionLayout = ({ option, element }: OptionLayoutProps) => {
+  switch (option.type) {
+    case "select-one":
+      return (
+        <MenubarMenu key={element.id + option.optionName}>
+          <MenubarTrigger>{option.optionName}</MenubarTrigger>
+          <MenubarContent>
+            <MenubarRadioGroup
+              value={option.optionDefault}
+              onValueChange={
+                option.action
+                  ? (value) => option.action!(value as typeof value)
+                  : () => {}
+              }
+            >
+              {option.optionList.map((op) => (
+                <MenubarRadioItem
+                  key={element.id + option.optionName + op}
+                  value={op}
+                >
+                  {op}
+                </MenubarRadioItem>
+              ))}
+            </MenubarRadioGroup>
+          </MenubarContent>
+        </MenubarMenu>
+      );
+
+    case "custom":
+      return option.children;
+
+    default:
+      return null;
+  }
+};
+
+interface EditionToolsProps {
+  element: DynamicElement;
+  options: Option[];
+}
+export function EditionTools({ element, options }: EditionToolsProps) {
   if (!element) return null;
   const isSelected = useSelector((state) => state.selection) === element.id;
   const dispatch = useDispatch();
@@ -59,34 +129,25 @@ export function EditionTools<T extends string>({
         </MenubarLabel>
       </MenubarMenu>
       {/* TODO: make this a user friendly name*/}
-      <Separator orientation="vertical" />
-      {options.map(({ optionName, optionList, action, optionDefault }) => (
-        <MenubarMenu key={element.id + optionName}>
-          <MenubarTrigger>{optionName}</MenubarTrigger>
-          <MenubarContent>
-            <MenubarRadioGroup
-              value={optionDefault}
-              onValueChange={action ? (value) => action(value as T) : () => {}}
-            >
-              {optionList.map((op) => (
-                <MenubarRadioItem key={element.id + optionName + op} value={op}>
-                  {op}
-                </MenubarRadioItem>
-              ))}
-            </MenubarRadioGroup>
-          </MenubarContent>
-        </MenubarMenu>
+      {options.map((option) => (
+        <>
+          <Separator orientation="vertical" />
+          <OptionLayout element={element} option={option} />
+        </>
       ))}
       {element.id !== rootElement ? (
-        <MenubarMenu>
-          <MenubarTrigger
-            onClick={() => {
-              dispatch(deleteElement(element.id));
-            }}
-          >
-            <TrashIcon />
-          </MenubarTrigger>
-        </MenubarMenu>
+        <>
+          <Separator orientation="vertical" />
+          <MenubarMenu>
+            <MenubarTrigger
+              onClick={() => {
+                dispatch(deleteElement(element.id));
+              }}
+            >
+              <TrashIcon />
+            </MenubarTrigger>
+          </MenubarMenu>
+        </>
       ) : null}
     </Menubar>
   );
