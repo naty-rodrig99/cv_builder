@@ -3,7 +3,7 @@ import "./text-edit-styles.css";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { useDispatch } from "~/components/cv/context";
 import { setText } from "./simple-text.state";
-import { EditionTools } from "../EditorTools";
+import { customOption, EditionTools } from "../EditorTools";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -65,11 +65,13 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
 
   return (
     <>
-      <EditionTools element={element} options={[]} />
-      <div className="relative p-2">
-        <LexicalComposer initialConfig={editorConfig}>
-          <div className="editor-container">
-            <ToolbarTextEdit />
+      <LexicalComposer initialConfig={editorConfig}>
+        <div className="editor-container">
+          <EditionTools
+            element={element}
+            options={[customOption(<ToolbarTextEdit />)]}
+          />
+          <div className="relative p-2">
             <div className="editor-inner w-full resize-none border-none bg-green-50 shadow-none">
               <RichTextPlugin
                 contentEditable={
@@ -86,8 +88,8 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
               <MyOnChangePlugin onChange={onChange} />
             </div>
           </div>
-        </LexicalComposer>
-      </div>
+        </div>
+      </LexicalComposer>
     </>
   );
 };

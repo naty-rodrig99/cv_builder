@@ -300,9 +300,9 @@ pre::-webkit-scrollbar-thumb {
 
 .toolbar {
   display: flex;
-  margin-bottom: 1px;
+  margin-bottom: 0px;
   background: #fff;
-  padding: 4px;
+  padding: 0px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   vertical-align: middle;
@@ -313,7 +313,7 @@ pre::-webkit-scrollbar-thumb {
   display: flex;
   background: none;
   border-radius: 10px;
-  padding: 8px;
+  padding: 6px;
   cursor: pointer;
   vertical-align: middle;
 }
@@ -323,18 +323,18 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .toolbar button.toolbar-item.spaced {
-  margin-right: 2px;
+  margin-right: 0px;
 }
 
 .toolbar button.toolbar-item i.format {
   background-size: contain;
   display: inline-block;
-  height: 18px;
-  width: 18px;
-  margin-top: 2px;
+  height: 16px;
+  width: 16px;
+  margin-top: 0px;
   vertical-align: -0.25em;
   display: flex;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .toolbar button.toolbar-item:disabled i.format {
@@ -342,7 +342,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .toolbar button.toolbar-item.active {
-  background-color: rgba(223, 232, 250, 0.3);
+  background-color: rgba(223, 232, 250, 0.5);
 }
 
 .toolbar button.toolbar-item.active i {
@@ -361,7 +361,7 @@ pre::-webkit-scrollbar-thumb {
 
 .toolbar .toolbar-item .text {
   display: flex;
-  line-height: 20px;
+  line-height: 14px;
   width: 200px;
   vertical-align: middle;
   font-size: 14px;
@@ -369,7 +369,7 @@ pre::-webkit-scrollbar-thumb {
   text-overflow: ellipsis;
   width: 70px;
   overflow: hidden;
-  height: 20px;
+  height: 14px;
   text-align: left;
 }
 
