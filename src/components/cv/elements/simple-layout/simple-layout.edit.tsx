@@ -14,7 +14,7 @@ import {
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import { DropZone } from "~/components/drag-n-drop";
 import { AnyElement } from "../../schema";
-import { EditionTools, selectOneOption } from "../EditorTools";
+import { EditionTools, selectOneOption } from "../editor-tools";
 
 export interface SimpleLayoutEditProps {
   element: SimpleLayoutElement;
