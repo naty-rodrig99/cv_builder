@@ -41,6 +41,35 @@ export async function createNewProject(): ActionResult<
   return redirect("/projects/" + cvId);
 }
 
+export async function deleteProject(
+  cvId: string,
+): ActionResult<null, { message: string; details?: unknown }> {
+  const user = await getUser();
+  if (!user) {
+    return actionError({
+      message: "401 Unauthenticated",
+      details: user,
+    });
+  }
+
+  const cv = await db.query.cvTable.findFirst({
+    where: eq(cvTable.id, cvId),
+  });
+  if (cv == null) {
+    return actionError({ message: `404 Not Found` });
+  }
+  if (cv.userId !== user.id) {
+    return actionError({
+      message: "403 Unauthorized",
+      details: user,
+    });
+  }
+
+  await db.delete(cvTable).where(eq(cvTable.id, cvId));
+
+  return actionOk(null);
+}
+
 export async function saveCvSchema(
   cvId: string,
   cvData: { name: string | null; schema: CvSchema },
@@ -72,7 +101,6 @@ export async function saveCvSchema(
       details: "The CV must have a non empty name.",
     });
   }
-  console.log("Tag", cvData.name);
 
   const result = await cvSchema.safeParseAsync(cvData.schema);
   // TODO: make sure that the name given is also a safe string
