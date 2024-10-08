@@ -48,7 +48,7 @@ export default async function ProjectExportPage({ params }: ProjectPageProps) {
 
   return (
     <div className="flex h-screen w-full flex-col items-center bg-background px-4">
-      <CvPrint projectId={projectId} schema={cvData.schema} />
+      <CvPrint projectId={projectId} name={cvData.name} schema={cvData.schema} />
     </div>
   );
 }

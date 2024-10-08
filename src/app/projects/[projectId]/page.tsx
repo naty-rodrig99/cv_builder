@@ -27,7 +27,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     redirect(routeLogin({ redirectTo: routeProject(projectId) }));
   }
 
-  // Todo: Grab this from the db.
   const retrievedCv = await db
     .select({ cvName: cvTable.cvName, cvData: cvTable.cvData })
     .from(cvTable)
@@ -53,9 +52,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <CvEditor
         projectId={projectId}
         cv={cvData}
-        saveAction={async (schema) => {
+        saveAction={async (cvData) => {
           "use server";
-          await saveCvSchema(projectId, schema);
+          await saveCvSchema(projectId, cvData);
         }}
       />
     </main>

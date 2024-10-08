@@ -24,7 +24,7 @@ import { DndContext, DragOverlay, useDraggable } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import { setFormat, zoom } from "./state/reducer";
+import { setFormat, setName, zoom } from "./state/reducer";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
@@ -158,11 +158,14 @@ export interface CvEditorProps {
     name: string;
     schema: CvSchema;
   };
-  saveAction: (schema: CvSchema) => Promise<void>;
+  saveAction: (cvData: {
+    name: string | null;
+    schema: CvSchema;
+  }) => Promise<void>;
 }
 
 const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
-  const [state, dispatch] = useCvEditorState(cv.schema);
+  const [state, dispatch] = useCvEditorState(cv.name, cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
   >(null);
@@ -173,7 +176,15 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
       <div className="flex size-full flex-col">
         <header className="flex flex-row justify-between p-8">
-          <H1>{cv.name}</H1>
+          <H1>
+            <input
+              value={state.name === null ? "Untitled CV" : state.name}
+              onChange={(event) => {
+                console.log(event.target.value);
+                dispatch(setName(event.target.value));
+              }}
+            ></input>
+          </H1>
           <FormatSelector />
           <Button
             variant="secondary"
@@ -181,7 +192,10 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
             onClick={async () => {
               setSavingSchema(true);
               try {
-                await saveAction(state.schema);
+                await saveAction({
+                  name: state.name,
+                  schema: state.schema,
+                });
                 toast.success("You can rest. Your CV is save now 😌");
               } catch (error) {
                 console.error(error);

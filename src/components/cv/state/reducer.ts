@@ -10,6 +10,7 @@ import {
 
 export type CvBuilderState = {
   schema: CvSchema;
+  name: string | null;
   selection: string | null;
   zoom: number;
 };
@@ -166,6 +167,25 @@ const ZoomReducer: Reducer = (state, action) => {
   }
 };
 
+const SetName = Symbol.for("SetName");
+export const setName = (value: string) => {
+  return { type: SetName, payload: { value } } as const;
+};
+export type SetNameAction = ReturnType<typeof setName>;
+
+const NameReducer: Reducer = (state, action) => {
+  switch (action.type) {
+    case SetName: {
+      return {
+        ...state,
+        name: action.payload.value,
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 const SetFormat = Symbol.for("SetFormat");
 export const setFormat = (value: CvFormat) => {
   return { type: SetFormat, payload: { value } } as const;
@@ -191,6 +211,7 @@ export type AnyAction =
   | FocusElementAction
   | DeleteElementAction
   | ZoomAction
+  | SetNameAction
   | SetFormatAction;
 
 export const cvStateReducer = (
@@ -203,6 +224,7 @@ export const cvStateReducer = (
     selectionReducer,
     elementReducer,
     ZoomReducer,
+    NameReducer,
     FormatReducer,
   ];
   return reducers.reduce((s, reducer) => {
@@ -211,8 +233,16 @@ export const cvStateReducer = (
   }, state);
 };
 
-export const initialCvBuilderState = (schema: CvSchema) => {
+export interface initialCvBuilderStateProps {
+  name: string;
+  schema: CvSchema;
+}
+export const initialCvBuilderState = ({
+  name,
+  schema,
+}: initialCvBuilderStateProps) => {
   return {
+    name: name,
     schema: schema,
     selection: null,
     zoom: 1,

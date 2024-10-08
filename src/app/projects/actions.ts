@@ -42,7 +42,7 @@ export async function createDummyProject(): ActionResult<
 
 export async function saveCvSchema(
   cvId: string,
-  schema: CvSchema,
+  cvData: { name: string | null; schema: CvSchema },
 ): ActionResult<null, { message: string; details?: unknown }> {
   const user = await getUser();
   if (!user) {
@@ -55,11 +55,9 @@ export async function saveCvSchema(
   const cv = await db.query.cvTable.findFirst({
     where: eq(cvTable.id, cvId),
   });
-
   if (cv == null) {
     return actionError({ message: `404 Not Found` });
   }
-
   if (cv.userId !== user.id) {
     return actionError({
       message: "403 Unauthorized",
@@ -67,7 +65,16 @@ export async function saveCvSchema(
     });
   }
 
-  const result = await cvSchema.safeParseAsync(schema);
+  if (!cvData.name) {
+    return actionError({
+      message: "400 Invalid Arguments",
+      details: "The CV must have a non empty name.",
+    });
+  }
+  console.log("Tag", cvData.name);
+
+  const result = await cvSchema.safeParseAsync(cvData.schema);
+  // TODO: make sure that the name given is also a safe string
   if (!result.success) {
     return actionError({
       message: "400 Invalid Arguments",
@@ -77,7 +84,7 @@ export async function saveCvSchema(
 
   await db
     .update(cvTable)
-    .set({ cvData: result.data })
+    .set({ cvName: cvData.name, cvData: result.data })
     .where(eq(cvTable.id, cvId));
 
   return actionOk(null);
