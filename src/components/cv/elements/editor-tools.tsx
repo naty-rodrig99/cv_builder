@@ -15,7 +15,7 @@ import { Separator } from "~/components/ui/separator";
 import { TrashIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { deleteElement } from "../state/reducer";
 import { retrieveElementContext } from "./element-context";
-import React from "react";
+import React, { useId } from "react";
 import { AnyElement } from "../schema";
 
 type DynamicElement = SimpleLayoutElement | SimpleTextElement;
@@ -130,10 +130,10 @@ export function EditionTools({ element, options }: EditionToolsProps) {
       </MenubarMenu>
       {/* TODO: make this a user friendly name*/}
       {options.map((option) => (
-        <>
+        <div key={useId()}>
           <Separator orientation="vertical" />
           <OptionLayout element={element} option={option} />
-        </>
+        </div>
       ))}
       {element.id !== rootElement ? (
         <>

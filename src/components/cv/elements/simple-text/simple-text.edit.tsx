@@ -3,7 +3,7 @@ import "./text-edit-styles.css";
 import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { useDispatch } from "~/components/cv/context";
 import { setText } from "./simple-text.state";
-import { customOption, EditionTools } from "../EditorTools";
+import { customOption, EditionTools } from "../editor-tools";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
