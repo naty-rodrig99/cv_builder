@@ -41,7 +41,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         cv={cvData}
         saveAction={async (schema) => {
           "use server";
-          await saveCvSchema(projectId, schema);
+          const result = await saveCvSchema(projectId, schema);
+          if (!result.ok) throw new Error(result.error.message);
         }}
       />
     </main>

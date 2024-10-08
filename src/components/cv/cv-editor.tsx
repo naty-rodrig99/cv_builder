@@ -182,7 +182,7 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
               setSavingSchema(true);
               try {
                 await saveAction(state.schema);
-                toast.success("You can rest. Your CV is save now 😌");
+                toast.success("You can rest now. Your CV is save 😌");
               } catch (error) {
                 console.error(error);
                 toast.error(
