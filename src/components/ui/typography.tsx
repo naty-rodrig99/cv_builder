@@ -235,3 +235,67 @@ const Quote = forwardRef<
 
 Quote.displayName = "Quote";
 export { Quote };
+
+
+const WebsiteName = forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>((props, ref) => {
+  return (
+    <h1
+      {...props}
+      ref={ref}
+      className={cn(
+        "text-lg font-bold text-indigo-600",
+        props.className,
+      )}
+    >
+      {props.children}
+    </h1>
+  );
+});
+
+WebsiteName.displayName = "MainTitle";
+export { WebsiteName };
+
+const H0 = forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>((props, ref) => {
+  return (
+    <h1
+      {...props}
+      ref={ref}
+      className={cn(
+        "text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl",
+        props.className,
+      )}
+    >
+      {props.children}
+    </h1>
+  );
+});
+
+H0.displayName = "H0";
+export { H0 };
+
+const P1 = forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>((props, ref) => {
+  return (
+    <h1
+      {...props}
+      ref={ref}
+      className={cn(
+        "mt-6 text-lg leading-8 text-gray-600",
+        props.className,
+      )}
+    >
+      {props.children}
+    </h1>
+  );
+});
+
+P1.displayName = "P1";
+export { P1 };

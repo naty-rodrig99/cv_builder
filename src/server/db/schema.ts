@@ -31,8 +31,12 @@ export const userTable = createTable(
     id: text("id").primaryKey(),
     username: text("username").unique().notNull(),
     passwordHash: text("password_hash").unique().notNull(),
-    createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-    updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+    createdAt: int("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: int("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
     fullName: text("full_name"),
     birthDate: int("birth_date", { mode: "timestamp" }),
     phoneNumber: text("phone_number"),
@@ -58,8 +62,12 @@ export const workExperienceTable = createTable("workExperience", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   jobStart: int("job_start", { mode: "timestamp" }),
   jobEnd: int("job_end", { mode: "timestamp" }),
   company: text("company"),
@@ -73,8 +81,12 @@ export const ExperienceTable = createTable("Experience", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   experienceStart: int("experience_start", { mode: "timestamp" }),
   experienceEnd: int("experience_end", { mode: "timestamp" }),
   experienceName: text("experience_name"),
@@ -88,8 +100,12 @@ export const degreeTable = createTable("degree", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   degreeStart: int("degree_start", { mode: "timestamp" }),
   degreeEnd: int("degree_end", { mode: "timestamp" }),
   degreeName: text("degree_name"),
@@ -103,8 +119,12 @@ export const projectTable = createTable("project", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   projectStart: int("project_start", { mode: "timestamp" }),
   projectEnd: int("project_end", { mode: "timestamp" }),
   projectName: text("project_name"),
@@ -116,8 +136,12 @@ export const linkTable = createTable("link", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   linkURL: text("link_url"),
   linkName: text("link_name"),
 });
@@ -127,8 +151,12 @@ export const skillTable = createTable("skill", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   skillName: text("skill_name"),
 });
 
@@ -137,10 +165,14 @@ export const cvTable = createTable("CV", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   cvName: text("cv_name").unique().notNull(),
-  cvData: blob("cv_data"),
+  cvData: text("cv_data", { mode: "json" }),
 });
 
 export const templateTable = createTable("template", {
@@ -148,8 +180,12 @@ export const templateTable = createTable("template", {
   authorId: text("author_id")
     .notNull()
     .references(() => userTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
   templateName: text("template_name").unique().notNull(),
   templateData: blob("cv_data"),
 });
@@ -162,6 +198,10 @@ export const starredTemplateTable = createTable("starred_template", {
   templateId: text("template_id")
     .notNull()
     .references(() => templateTable.id),
-  createdAt: int("created_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
-  updatedAt: int("updated_at", {mode: "timestamp"}).notNull().default(sql`(unixepoch())`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
 });

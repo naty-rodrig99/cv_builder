@@ -1,10 +1,11 @@
-import { PageProps } from "~/lib/page-props";
+import { type PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
 import { routeLogin, routeProject } from "~/app/routes";
 import CvEditor from "~/components/cv/cv-editor";
 import { newSchema } from "~/components/cv/schema.template";
 import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
+import { saveCvSchema } from "~/app/projects/actions";
 
 interface ProjectPageProps extends PageProps {
   params: { projectId: string };
@@ -35,7 +36,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main className="flex h-screen w-full flex-col items-center bg-background px-4">
-      <CvEditor cv={cvData} />
+      <CvEditor
+        projectId={projectId}
+        cv={cvData}
+        saveAction={async (schema) => {
+          "use server";
+          const result = await saveCvSchema(projectId, schema);
+          if (!result.ok) throw new Error(result.error.message);
+        }}
+      />
     </main>
   );
 }

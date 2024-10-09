@@ -1,6 +1,8 @@
-import { getUser } from "~/server/user";
+import { getProjects, getUser } from "~/server/user";
 import { redirect } from "next/navigation";
 import { routeLogin, routeProjects } from "~/app/routes";
+import { Label } from "~/components/ui/label";
+import ProjectsList from "./projects-list";
 
 export default async function ProjectsPage() {
   const user = await getUser();
@@ -9,11 +11,18 @@ export default async function ProjectsPage() {
     return redirect(routeLogin({ redirectTo: routeProjects() }));
   }
 
+  const projects = await getProjects();
+  if (!projects) {
+    return (
+      <main className="flex h-screen w-full items-center justify-center bg-background px-4">
+        <Label>No projects created yet</Label>
+      </main>
+    );
+  }
+
   return (
     <main className="flex h-screen w-full items-center justify-center bg-background px-4">
-      <ul>
-        <li>List of things</li>
-      </ul>
+      <ProjectsList projects={projects} />
     </main>
   );
 }

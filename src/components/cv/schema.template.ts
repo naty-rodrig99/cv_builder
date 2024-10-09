@@ -10,7 +10,7 @@ export const newSchema = (args: { elements: ElementTemplate[] }) => {
   });
 
   return {
-    size: "DINA4",
+    format: "DINA4",
     theme: "minimalistic",
     rootElement: rootElement.id,
     elements,

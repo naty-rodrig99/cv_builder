@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import React from "react";
+import { Toaster } from "~/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "CV Builder",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     >
       <body suppressHydrationWarning={true}>
         <div className="flex min-h-screen w-full flex-col">{children}</div>
+        <Toaster position="top-center" />
       </body>
     </html>
   );
