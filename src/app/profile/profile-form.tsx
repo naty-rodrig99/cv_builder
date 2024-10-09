@@ -51,8 +51,10 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
     const saveResult = await saveProfile(profileData);
     if (!saveResult.ok) {
       console.error("Failed to save profile data", saveResult.error);
+      // TODO: notify user nicely
     } else {
-      console.log("Profile saved successfully.");
+      // console.log("Profile saved successfully.");
+      // TODO: notify user nicely
     }
   };
 
@@ -67,7 +69,8 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
 
     const validate = profileSchemaErrorMessages.safeParse(formProfileData);
     if (!validate.success) {
-      console.log(validate.error);
+      console.error(validate.error);
+      // TODO: catch this error or idk
     }
     debouncedRequest();
   };

@@ -100,7 +100,6 @@ const insertElement = (
 ): ((state: CvBuilderState) => CvBuilderState) => {
   return updateElement("simple-layout", parentId, (el) => {
     const newChildren = [...el.slots!.children];
-    console.log(newChildren);
     newChildren.splice(index, 0, elementId);
     return {
       ...el,

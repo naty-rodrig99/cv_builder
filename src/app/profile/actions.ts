@@ -38,11 +38,9 @@ export async function saveProfile(
       });
     }
 
-    console.log("Validation passed");
     const result = await profileSchemaDatabase.safeParseAsync(profileData);
 
     if (!result.success) {
-      console.log("safeParseAsync Failed");
       return actionError({
         message: "Invalid form input",
         details: result.error.flatten(),
@@ -67,8 +65,6 @@ export async function saveProfile(
         aboutMe: result.data.aboutMe,
       })
       .where(eq(userTable.id, user.id));
-
-    console.log("update: ", update);
 
     return actionOk(null);
   } catch (error) {

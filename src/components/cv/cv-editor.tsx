@@ -180,7 +180,6 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
             <input
               value={state.name === null ? "Untitled CV" : state.name}
               onChange={(event) => {
-                console.log(event.target.value);
                 dispatch(setName(event.target.value));
               }}
             ></input>

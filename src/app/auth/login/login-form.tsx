@@ -37,7 +37,6 @@ function LoginForm() {
     <Card className="w-full max-w-sm">
       <form
         action={async (formData) => {
-          console.log(formData);
           try {
             const result = await logIn(formData);
             const redirectUrl = search.get("redirectTo") || "/";
