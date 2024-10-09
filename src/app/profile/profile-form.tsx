@@ -1,10 +1,11 @@
 "use client"; // Ensure this component is a Client Component
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { saveProfile, UserProfile } from "./actions";
+import { z } from "zod";
 
 import {
   Card,
@@ -19,6 +20,18 @@ import { useDebounce } from "~/lib/useDebounce";
 interface ProfileFormProps {
   profileData: UserProfile;
 }
+
+const profileSchemaErrorMessages = z.object({
+  fullName: z.string().trim().min(1, "Consider adding your full name"),
+  birthDate: z.string(),
+  phoneNumber: z
+    .string()
+    .trim()
+    .min(1, "Your phone number is valuable for recruiters to contact you"),
+  email: z.string().email("The email address is invalid"),
+  address: z.string(),
+  aboutMe: z.string(),
+});
 
 const ProfileForm = ({ profileData }: ProfileFormProps) => {
   const [formProfileData, setFormProfileData] = useState({
@@ -51,6 +64,11 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
           ? new Date(value).toISOString().split("T")[0]
           : value, // Handle conversion if necessary
     }));
+
+    const validate = profileSchemaErrorMessages.safeParse(formProfileData);
+    if (!validate.success) {
+      console.log(validate.error);
+    }
     debouncedRequest();
   };
 
