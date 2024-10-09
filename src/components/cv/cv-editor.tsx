@@ -196,7 +196,7 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
                   name: state.name,
                   schema: state.schema,
                 });
-                toast.success("You can rest. Your CV is save now 😌");
+                toast.success("You can rest now. Your CV is saved 😌");
               } catch (error) {
                 console.error(error);
                 toast.error(
