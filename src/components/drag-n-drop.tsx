@@ -1,8 +1,4 @@
-import {
-  DragEndEvent,
-  useDndMonitor,
-  useDroppable,
-} from "@dnd-kit/core";
+import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
 
 interface DroppableProps<E extends string> {
@@ -17,7 +13,11 @@ export function Droppable<E extends string>({
     id: id,
   });
 
-  return <div ref={setNodeRef}>{children}</div>;
+  return (
+    <div ref={setNodeRef} className="flex-1 bg-red-200">
+      {children}
+    </div>
+  );
 }
 
 interface DropZoneProps<E> {
@@ -37,7 +37,7 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
     },
   });
   return (
-    <div id={id} className={cn("relative z-20 w-full")}>
+    <div id={id} className={cn("relative z-20 flex-1 bg-yellow-200")}>
       <div
         ref={setNodeRef}
         className={cn(

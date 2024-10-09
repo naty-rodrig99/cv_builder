@@ -6,11 +6,13 @@ interface SimpleTextOnChangePluginProps {
   onChange: (editorState: EditorState) => void;
 }
 
-export default function SimpleTextOnChangePlugin({ onChange }: SimpleTextOnChangePluginProps) {
+export default function SimpleTextOnChangePlugin({
+  onChange,
+}: SimpleTextOnChangePluginProps) {
   const [editor] = useLexicalComposerContext();
-  
+
   useEffect(() => {
-    return editor.registerUpdateListener(({editorState}) => {
+    return editor.registerUpdateListener(({ editorState }) => {
       onChange(editorState);
     });
   }, [editor, onChange]);
