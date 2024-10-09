@@ -62,10 +62,7 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
           }}
         />
         {element.slots.children.map((id, index) => (
-          <div
-            key={"simple-lyt-edit" + index}
-            className={cn("flex-1 bg-green-500 bg-opacity-20")}
-          >
+          <div key={"simple-lyt-edit" + index} className={cn("flex-1")}>
             <DynamicElementEdit key={id} elementId={id} />
             <DropZone
               id={id + "-next-dropzone"}

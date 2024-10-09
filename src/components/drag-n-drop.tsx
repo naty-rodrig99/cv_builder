@@ -14,7 +14,7 @@ export function Droppable<E extends string>({
   });
 
   return (
-    <div ref={setNodeRef} className="flex-1 bg-red-200">
+    <div ref={setNodeRef} className="flex-1">
       {children}
     </div>
   );
@@ -37,14 +37,16 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
     },
   });
   return (
-    <div id={id} className={cn("relative z-20 flex-1 bg-yellow-200")}>
+    <>
       <div
+        id={id}
         ref={setNodeRef}
         className={cn(
-          "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[24px]",
+          "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[30px]",
           isOver && "visible outline-dashed outline-border",
+          "transition-all duration-300", // Smooth transition when hovering over
         )}
       />
-    </div>
+    </>
   );
 }
