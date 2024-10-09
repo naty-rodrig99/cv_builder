@@ -7,8 +7,10 @@ import { cvTable } from "~/server/db/schema";
 import { getUser } from "~/server/user";
 import { cvSchema, CvSchema } from "~/components/cv/schema";
 import { eq } from "drizzle-orm";
+import { newSchema } from "~/components/cv/schema.template";
+import { redirect } from "next/navigation";
 
-export async function createDummyProject(): ActionResult<
+export async function createNewProject(): ActionResult<
   null,
   { message: string; details?: unknown }
 > {
@@ -25,7 +27,8 @@ export async function createDummyProject(): ActionResult<
   const cvValues = {
     id: cvId,
     userId: user.id,
-    cvName: "testCV" + cvId,
+    cvName: "Untitled CV",
+    cvData: newSchema({ elements: [] }),
   };
   try {
     const result = await db.insert(cvTable).values(cvValues).returning();
@@ -35,12 +38,11 @@ export async function createDummyProject(): ActionResult<
       details: cvValues,
     });
   }
-  return actionOk(null);
+  return redirect("/projects/" + cvId);
 }
 
-export async function saveCvSchema(
+export async function deleteProject(
   cvId: string,
-  schema: CvSchema,
 ): ActionResult<null, { message: string; details?: unknown }> {
   const user = await getUser();
   if (!user) {
@@ -53,11 +55,9 @@ export async function saveCvSchema(
   const cv = await db.query.cvTable.findFirst({
     where: eq(cvTable.id, cvId),
   });
-
   if (cv == null) {
     return actionError({ message: `404 Not Found` });
   }
-
   if (cv.userId !== user.id) {
     return actionError({
       message: "403 Unauthorized",
@@ -65,7 +65,45 @@ export async function saveCvSchema(
     });
   }
 
-  const result = await cvSchema.safeParseAsync(schema);
+  await db.delete(cvTable).where(eq(cvTable.id, cvId));
+
+  return actionOk(null);
+}
+
+export async function saveCvSchema(
+  cvId: string,
+  cvData: { name: string | null; schema: CvSchema },
+): ActionResult<null, { message: string; details?: unknown }> {
+  const user = await getUser();
+  if (!user) {
+    return actionError({
+      message: "401 Unauthenticated",
+      details: user,
+    });
+  }
+
+  const cv = await db.query.cvTable.findFirst({
+    where: eq(cvTable.id, cvId),
+  });
+  if (cv == null) {
+    return actionError({ message: `404 Not Found` });
+  }
+  if (cv.userId !== user.id) {
+    return actionError({
+      message: "403 Unauthorized",
+      details: user,
+    });
+  }
+
+  if (!cvData.name) {
+    return actionError({
+      message: "400 Invalid Arguments",
+      details: "The CV must have a non empty name.",
+    });
+  }
+
+  const result = await cvSchema.safeParseAsync(cvData.schema);
+  // TODO: make sure that the name given is also a safe string
   if (!result.success) {
     return actionError({
       message: "400 Invalid Arguments",
@@ -75,7 +113,7 @@ export async function saveCvSchema(
 
   await db
     .update(cvTable)
-    .set({ cvData: result.data })
+    .set({ cvName: cvData.name, cvData: result.data })
     .where(eq(cvTable.id, cvId));
 
   return actionOk(null);
