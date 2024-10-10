@@ -7,6 +7,10 @@ import {
   SimpleLayoutActions,
   simpleLayoutReducer,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
+import {
+  SimpleHeaderActions,
+  simpleHeaderReducer,
+} from "~/components/cv/elements/simple-header/simple-header.state";
 
 export type CvBuilderState = {
   schema: CvSchema;
@@ -188,6 +192,7 @@ const FormatReducer: Reducer = (state, action) => {
 export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
+  | SimpleHeaderActions
   | FocusElementAction
   | DeleteElementAction
   | ZoomAction

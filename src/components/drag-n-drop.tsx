@@ -23,8 +23,15 @@ export function Droppable<E extends string>({
 interface DropZoneProps<E> {
   id: E;
   onDrop: (event: DragEndEvent) => void;
+  direction: "horizontal" | "vertical";
+  hasChildren: boolean;
 }
-export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
+export function DropZone<E extends string>({
+  id,
+  onDrop,
+  direction,
+  hasChildren,
+}: DropZoneProps<E>) {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
   });
@@ -36,17 +43,21 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
       }
     },
   });
+
+  console.log(`DropZone - Layout ID: ${id}`);
+  console.log(`Has children: ${hasChildren}`);
+  console.log(`Direction: ${direction}`);
+
   return (
-    <>
+    <div id={id} className={cn("relative z-20 flex-1 bg-yellow-200")}>
       <div
-        id={id}
         ref={setNodeRef}
         className={cn(
-          "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[30px]",
-          isOver && "visible outline-dashed outline-border",
-          "transition-all duration-300", // Smooth transition when hovering over
+          "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[10px]",
+          isOver &&
+            "visible bg-green-200 bg-opacity-80 outline-dashed outline-border",
         )}
       />
-    </>
+    </div>
   );
 }

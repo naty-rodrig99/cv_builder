@@ -22,6 +22,7 @@ export interface SimpleLayoutEditProps {
 
 const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
   const dispatch = useDispatch();
+  const hasChildren = element.slots.children.length > 0;
 
   return (
     <>
@@ -38,34 +39,42 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
       />
       <div
         className={cn(
-          "flex min-h-24 w-full min-w-24 gap-2 bg-blue-500 bg-opacity-10",
+          "flex min-h-20 w-full min-w-24 gap-1 bg-blue-500 bg-opacity-10",
+
           {
             "flex-col": element.options.direction === "vertical",
             "flex-row": element.options.direction === "horizontal",
           },
         )}
       >
-        <DropZone
-          id={element.id + "-initial-dropzone"}
-          onDrop={(event) => {
-            if ("elementId" in event.active.data.current!) {
-              const targetId = event.active.data.current.elementId as string;
-              dispatch(moveElement(element.id, targetId, 0));
-              return;
-            }
-            if ("type" in event.active.data.current!) {
-              const elementType = event.active.data.current
-                .type as AnyElement["type"];
-              dispatch(insertNewElement(element.id, elementType, 0));
-              return;
-            }
-          }}
-        />
+        <div className="relative">
+          <DropZone
+            id={element.id + "-initial-dropzone"}
+            direction={element.options.direction}
+            hasChildren={hasChildren}
+            onDrop={(event) => {
+              if ("elementId" in event.active.data.current!) {
+                const targetId = event.active.data.current.elementId as string;
+                dispatch(moveElement(element.id, targetId, 0));
+                return;
+              }
+              if ("type" in event.active.data.current!) {
+                const elementType = event.active.data.current
+                  .type as AnyElement["type"];
+                dispatch(insertNewElement(element.id, elementType, 0));
+                return;
+              }
+            }}
+          />
+        </div>
         {element.slots.children.map((id, index) => (
           <div key={"simple-lyt-edit" + index} className={cn("flex-1")}>
             <DynamicElementEdit key={id} elementId={id} />
+
             <DropZone
               id={id + "-next-dropzone"}
+              direction={element.options.direction}
+              hasChildren={true}
               onDrop={(event) => {
                 if ("elementId" in event.active.data.current!) {
                   const targetId = event.active.data.current
