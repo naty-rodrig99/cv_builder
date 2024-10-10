@@ -1,7 +1,7 @@
 // src/app/profile/page.tsx
 
 import { fetchUser } from "./actions";
-import ProfileForm from "./profile-form";
+import ProfileForm from "../../components/cv/elements/profile-element/profile-form";
 
 export default async function ProfilePage() {
   const result = await fetchUser();

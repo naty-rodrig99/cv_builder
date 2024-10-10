@@ -2,6 +2,7 @@ import * as z from "zod";
 import { simpleLayoutElement } from "~/components/cv/elements/simple-layout/simple-layout.schema";
 import { simpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { simpleHeaderElement } from "~/components/cv/elements/simple-header/simple-header.schema";
+import { profileElement } from "./elements/profile-element/profile-element.schema";
 
 export const cvFormats = ["DINA4", "Letter"] as const;
 export type CvFormat = (typeof cvFormats)[number];
@@ -11,6 +12,7 @@ export const anyElement = z.lazy(() =>
     simpleLayoutElement,
     simpleTextElement,
     simpleHeaderElement,
+    profileElement,
     // ... and any other element that we define.
   ]),
 );

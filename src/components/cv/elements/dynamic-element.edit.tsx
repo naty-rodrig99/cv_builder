@@ -8,6 +8,7 @@ import { cn } from "~/lib/utils";
 import { focusElement } from "../state/reducer";
 import { useDraggable } from "@dnd-kit/core";
 import { ElementContextProvider } from "./element-context";
+import ProfileElementEdit from "./profile-element/profile-element.edit";
 
 export interface DynamicElementEditProps {
   elementId: string;
@@ -29,6 +30,9 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       break;
     case "simple-header":
       elementComponent = <SimpleHeaderEdit element={element} />;
+      break;
+    case "profile-element":
+      elementComponent = <ProfileElementEdit element={element} />;
       break;
     default:
   }

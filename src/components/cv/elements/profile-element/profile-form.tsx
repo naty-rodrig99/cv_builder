@@ -4,14 +4,13 @@ import React, { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { saveProfile, UserProfile } from "./actions";
+import { saveProfile, UserProfile } from "../../../../app/profile/actions";
 import { z } from "zod";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";

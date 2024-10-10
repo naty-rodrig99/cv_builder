@@ -35,7 +35,12 @@ import DynamicElementPreview from "./elements/dynamic-element.preview";
 import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
 
-const ELEMENT_LIST = ["simple-layout", "simple-text", "simple-header"] as const;
+const ELEMENT_LIST = [
+  "simple-layout",
+  "simple-text",
+  "simple-header",
+  "profile-element",
+] as const;
 
 interface DraggableProps {
   type: (typeof ELEMENT_LIST)[number];
@@ -79,6 +84,8 @@ const EditPanel = () => {
   const rootElement = useSelector((state) => state.schema.rootElement);
   const format = useSelector((state) => state.schema.format);
   const zoom = useSelector((state) => state.zoom);
+
+  console.log("rootElement in EditPanel: ", rootElement);
 
   return (
     <ScrollArea className={cn("size-full", "flex", "justify-center")}>
@@ -168,6 +175,9 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
   >(null);
 
   const [savingSchema, setSavingSchema] = useState(false);
+
+  console.log("state: ", state);
+  console.log("activeElementType: ", activeElementType);
 
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
