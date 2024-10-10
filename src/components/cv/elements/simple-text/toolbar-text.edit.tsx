@@ -21,7 +21,6 @@ export default function ToolbarTextEdit() {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -30,7 +29,6 @@ export default function ToolbarTextEdit() {
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
       setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
     }
   }, []);
 
@@ -80,15 +78,6 @@ export default function ToolbarTextEdit() {
         aria-label="Format Underline"
       >
         <i className="format underline" />
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-        }}
-        className={"toolbar-item spaced " + (isStrikethrough ? "active" : "")}
-        aria-label="Format Strikethrough"
-      >
-        <i className="format strikethrough" />
       </button>
       <Divider />
       <button
