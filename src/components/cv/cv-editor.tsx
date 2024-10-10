@@ -35,7 +35,7 @@ import DynamicElementPreview from "./elements/dynamic-element.preview";
 import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
 
-const ELEMENT_LIST = ["simple-layout", "simple-text"] as const;
+const ELEMENT_LIST = ["simple-layout", "simple-text", "simple-header"] as const;
 
 interface DraggableProps {
   type: (typeof ELEMENT_LIST)[number];

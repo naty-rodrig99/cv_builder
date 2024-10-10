@@ -17,8 +17,12 @@ import { deleteElement } from "../state/reducer";
 import { retrieveElementContext } from "./element-context";
 import React, { useId } from "react";
 import { AnyElement } from "../schema";
+import { SimpleHeaderElement } from "./simple-header/simple-header.schema";
 
-type DynamicElement = SimpleLayoutElement | SimpleTextElement;
+type DynamicElement =
+  | SimpleLayoutElement
+  | SimpleTextElement
+  | SimpleHeaderElement;
 
 type SelectOneOptions<SelOne> = {
   type: "select-one";

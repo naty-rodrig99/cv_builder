@@ -44,9 +44,11 @@ export function DropZone<E extends string>({
     },
   });
 
+  /*
   console.log(`DropZone - Layout ID: ${id}`);
   console.log(`Has children: ${hasChildren}`);
   console.log(`Direction: ${direction}`);
+  */
 
   return (
     <div id={id} className={cn("relative z-20 flex-1 bg-yellow-200")}>

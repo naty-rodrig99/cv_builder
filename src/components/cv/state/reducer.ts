@@ -205,6 +205,7 @@ export const cvStateReducer = (
   const reducers = [
     simpleTextReducer,
     simpleLayoutReducer,
+    simpleHeaderReducer,
     selectionReducer,
     elementReducer,
     ZoomReducer,

@@ -1,6 +1,7 @@
 import React from "react";
 import SimpleLayoutEdit from "./simple-layout/simple-layout.edit";
 import SimpleTextEdit from "./simple-text/simple-text.edit";
+import SimpleHeaderEdit from "./simple-header/simple-header.edit";
 import { selectElement } from "~/components/cv/state/selectors";
 import { useDispatch, useSelector } from "~/components/cv/context";
 import { cn } from "~/lib/utils";
@@ -25,6 +26,9 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       break;
     case "simple-text":
       elementComponent = <SimpleTextEdit element={element} />;
+      break;
+    case "simple-header":
+      elementComponent = <SimpleHeaderEdit element={element} />;
       break;
     default:
   }
