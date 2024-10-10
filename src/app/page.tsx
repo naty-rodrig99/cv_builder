@@ -7,8 +7,7 @@ import { routeLogin, routeSignup } from "~/app/routes";
 
 const navigation = [
   { name: 'Projects', href: '/projects' },
-  { name: 'Profile', href: '#' },
-  { name: 'About', href: '#' },
+  { name: 'Profile', href: '/profile-form' },
 ]
 
 export default async function HomePage() {
@@ -61,10 +60,7 @@ export default async function HomePage() {
             <P1>Choose a template or design your own CV. Collaborate with others and showcase your skills. Build a resume that truly represents you!</P1>
             <div className="mt-10 flex items-center justify-center gap-x-6">
             <Button asChild variant="colorBtn">
-              <Link href="">Get Started</Link>
-            </Button>
-            <Button asChild variant="loginBtn">
-              <Link href="">Learn more &rarr;</Link>
+              <Link href="/projects">Get Started</Link>
             </Button>
             </div>
           </div>
