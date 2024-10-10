@@ -51,6 +51,11 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
 
   const editorConfig = {
     namespace: "Rich Text Editor",
+    theme: {
+      text: {
+        underline: "underline",
+      },
+    },
     onError(error: Error) {
       throw error;
     },
