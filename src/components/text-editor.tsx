@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from "react";
 
-import { type EditorState } from "lexical";
+import { LexicalEditor, type EditorState } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -10,6 +10,7 @@ import {
   LexicalComposer,
 } from "@lexical/react/LexicalComposer";
 import { useStableCallback } from "~/lib/useStableCallback";
+import { cn } from "~/lib/utils";
 
 export const DEFAULT_EDITOR_STATE = `{
   "root": {
@@ -93,13 +94,15 @@ export interface TextEditorProps {
 }
 export const TextEditor = ({ placeholder }: TextEditorProps) => {
   const textEditorOnChange = useTextEditorOnChange();
+  const [editor] = useLexicalComposerContext();
+  const isEditable = editor.isEditable();
   return (
     <div className="relative p-2">
-      <div className="editor-inner w-full resize-none border-none bg-green-50 shadow-none">
+      <div className="w-full resize-none border-none shadow-none">
         <RichTextPlugin
           contentEditable={
             <ContentEditable
-              className="editor-input"
+              className={cn({ "editor-inner editor-input": isEditable })}
               aria-placeholder={placeholder}
               placeholder={
                 <div className="editor-placeholder">{placeholder}</div>
