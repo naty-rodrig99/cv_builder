@@ -62,7 +62,13 @@ export default function ProjectsList({
         ))}
       </CardContent>
       <CardFooter>
-        <Button onClick={newProject}>Create a new CV</Button>
+        <Button
+          onClick={() => {
+            newProject();
+          }}
+        >
+          Create a new CV
+        </Button>
       </CardFooter>
     </Card>
   );
