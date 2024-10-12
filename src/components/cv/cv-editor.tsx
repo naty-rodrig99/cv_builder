@@ -28,8 +28,6 @@ import { setFormat, setName, zoom } from "./state/reducer";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import Link from "next/link";
-import { routeProjectExport } from "~/app/routes";
 import Paper from "~/components/paper";
 import DynamicElementPreview from "./elements/dynamic-element.preview";
 import { toast } from "sonner";
@@ -160,17 +158,17 @@ const FormatSelector = () => {
 
 interface EditorHeaderProps {
   projectName: string;
-  projectId: string;
   onRename: (event: React.ChangeEvent<HTMLInputElement>) => void;
   saving: boolean;
   onSave: () => void;
+  onExport: () => void;
 }
 export const EditorHeader = ({
   projectName,
-  projectId,
   onRename,
   saving,
   onSave,
+  onExport,
 }: EditorHeaderProps) => {
   return (
     <header className="flex flex-row justify-between p-8">
@@ -182,15 +180,12 @@ export const EditorHeader = ({
         {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
         Save
       </Button>
-      <Button asChild>
-        <Link href={routeProjectExport(projectId)}>Export</Link>
-      </Button>
+      <Button onClick={onExport}>Export</Button>
     </header>
   );
 };
 
 export interface CvEditorProps {
-  projectId: string;
   cv: {
     name: string;
     schema: CvSchema;
@@ -199,8 +194,12 @@ export interface CvEditorProps {
     name: string | null;
     schema: CvSchema;
   }) => Promise<void>;
+  exportAction: (cvData: {
+    name: string | null;
+    schema: CvSchema;
+  }) => Promise<void>;
 }
-const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
+const CvEditor = ({ cv, saveAction, exportAction }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.name, cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
@@ -227,15 +226,34 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
     }
   };
 
+  const onExport = async () => {
+    setSavingSchema(true);
+    try {
+      await exportAction({
+        name: state.name,
+        schema: state.schema,
+      });
+      toast.success("Your CV has been saved");
+    } catch (error) {
+      console.error(error);
+      toast.error("We could not save your CV. Please try again later.", {
+        dismissible: true,
+        closeButton: true,
+      });
+    } finally {
+      setSavingSchema(false);
+    }
+  };
+
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
       <div className="flex size-full flex-col">
         <EditorHeader
           projectName={state.name === null ? "Untitled CV" : state.name}
-          projectId={projectId}
           onRename={(event) => dispatch(setName(event.target.value))}
           saving={savingSchema}
           onSave={onSave}
+          onExport={onExport}
         />
         <DndContext
           id={useId()}

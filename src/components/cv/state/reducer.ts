@@ -12,7 +12,7 @@ import {
   simpleLayoutReducer,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
-  SimpleHeaderActions,
+  type SimpleHeaderActions,
   simpleHeaderReducer,
 } from "~/components/cv/elements/simple-header/simple-header.state";
 

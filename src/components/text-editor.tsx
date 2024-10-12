@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from "react";
 
-import { LexicalEditor, type EditorState } from "lexical";
+import { type EditorState } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
