@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
-import { createNewProject, deleteProject } from "./actions";
 import Link from "next/link";
 import { routeProject } from "../routes";
 import { cn } from "~/lib/utils";
@@ -26,6 +25,7 @@ export default function ProjectsList({
   newProject,
   deleteProject,
 }: ProjectsListProps) {
+  // Todo: Remove duplicated state here.
   const [projectList, setProjectList] = useState(projects);
 
   return (
