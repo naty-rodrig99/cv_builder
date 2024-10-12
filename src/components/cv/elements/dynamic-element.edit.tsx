@@ -3,10 +3,10 @@ import SimpleLayoutEdit from "./simple-layout/simple-layout.edit";
 import SimpleTextEdit from "./simple-text/simple-text.edit";
 import { selectElement } from "~/components/cv/state/selectors";
 import { useDispatch, useSelector } from "~/components/cv/context";
-import { cn } from "~/lib/utils";
 import { focusElement } from "../state/reducer";
 import { useDraggable } from "@dnd-kit/core";
 import { ElementContextProvider } from "./element-context";
+import GenericElementWrapperEdit from "./generic-element-wrapper.edit";
 
 export interface DynamicElementEditProps {
   elementId: string;
@@ -41,20 +41,17 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       listeners={listeners}
       setActivatorNodeRef={setActivatorNodeRef}
     >
-      <div
+      <GenericElementWrapperEdit
+        elementId={element.id}
         ref={setNodeRef}
-        {...attributes}
-        className={cn(
-          "outline-radius-5 relative outline-border",
-          isSelected && "outline-dashed",
-        )}
+        attributes={attributes}
         onClick={(event) => {
           event.stopPropagation();
           dispatch(focusElement(element.id));
         }}
       >
         {elementComponent}
-      </div>
+      </GenericElementWrapperEdit>
     </ElementContextProvider>
   );
 };

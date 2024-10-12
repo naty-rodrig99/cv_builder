@@ -19,7 +19,7 @@ interface InvalidDataProps {
   errorMessage: string;
 }
 
-function InvalidData({ errorMessage }: InvalidDataProps) {
+function DisplayInvalidDataError({ errorMessage }: InvalidDataProps) {
   if (errorMessage) {
     return (
       <CardDescription className="text-red-600">{errorMessage}</CardDescription>
@@ -29,6 +29,7 @@ function InvalidData({ errorMessage }: InvalidDataProps) {
 }
 
 function LoginForm() {
+  // The three next lines should be taken apart in a presenter component, keeping them here is reasonable
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const search = useSearchParams();
@@ -58,7 +59,7 @@ function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <InvalidData errorMessage={errorMessage} />
+          <DisplayInvalidDataError errorMessage={errorMessage} />
           <div className="grid gap-2">
             <Label htmlFor="username">Username</Label>
             <Input

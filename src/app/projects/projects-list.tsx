@@ -18,9 +18,14 @@ import { useState } from "react";
 
 export interface ProjectsListProps {
   projects: { id: string; name: string }[];
+  newProject: () => void;
+  deleteProject: (projectId: string, index: number) => void;
 }
-export default function ProjectsList({ projects }: ProjectsListProps) {
-  const [projectList, setProjectList] = useState(projects);
+export default function ProjectsList({
+  projects,
+  newProject,
+  deleteProject,
+}: ProjectsListProps) {
   return (
     <Card>
       <CardHeader>
@@ -44,11 +49,7 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
             <Button
               variant="ghost"
               className="tiny"
-              onClick={async () => {
-                await deleteProject(project.id).then(() =>
-                  setProjectList(projectList.splice(i, 1)),
-                );
-              }}
+              onClick={() => deleteProject(project.id, i)}
             >
               <TrashIcon />
             </Button>
@@ -56,13 +57,7 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
         ))}
       </CardContent>
       <CardFooter>
-        <Button
-          onClick={async () => {
-            await createNewProject();
-          }}
-        >
-          Create a new CV
-        </Button>
+        <Button onClick={newProject}>Create a new CV</Button>
       </CardFooter>
     </Card>
   );

@@ -21,6 +21,7 @@ export interface SimpleLayoutEditProps {
 }
 
 const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
+  // This component weaves view and presenter parts, reflecting the visual nature of the represented element.
   const dispatch = useDispatch();
 
   return (
