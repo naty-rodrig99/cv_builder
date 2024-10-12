@@ -1,6 +1,6 @@
 "use client";
 
-import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import { type SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import React, { useContext, useMemo } from "react";
 
 export interface ElementContext {
@@ -35,21 +35,15 @@ export const ElementContextProvider = ({
   );
 };
 
-export function retrieveElementContext(elementId: string): ElementContext {
+export function useElementContext(elementId: string): ElementContext {
   const ctx = useContext(elementContext);
   if (ctx == null) {
     throw new Error(
       "retrieveElementContext(elementId) must be used within elementContext provider.",
     );
   }
-  if (ctx.elementId !== elementId) {
-    try {
-      return retrieveElementContext(elementId);
-    } catch {
-      throw new Error(
-        "retrieveElementContext(elementId) must be used within the requested element's elementContext provider",
-      );
-    }
-  }
-  return ctx;
+  if (ctx.elementId === elementId) return ctx;
+  throw new Error(
+    "retrieveElementContext(elementId) must be used within the requested element's elementContext provider",
+  );
 }

@@ -14,10 +14,14 @@ export interface DynamicElementEditProps {
 
 const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
   const element = useSelector(selectElement(elementId));
-  if (!element) return null;
-  const isSelected = useSelector((state) => state.selection) === element.id;
   let elementComponent: React.ReactNode | null = null;
   const dispatch = useDispatch();
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef } =
+    useDraggable({
+      id: element!.id,
+      data: { elementId: element!.id },
+    });
+  if (!element) return null;
 
   switch (element.type) {
     case "simple-layout":
@@ -28,12 +32,6 @@ const DynamicElementEdit = ({ elementId }: DynamicElementEditProps) => {
       break;
     default:
   }
-
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef } =
-    useDraggable({
-      id: element.id,
-      data: { elementId: element.id },
-    });
 
   return (
     <ElementContextProvider

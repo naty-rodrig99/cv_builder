@@ -1,5 +1,5 @@
 import React from "react";
-import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
+import { type SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 
 export interface SimpleTextPrintProps {
   element: SimpleTextElement;

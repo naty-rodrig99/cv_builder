@@ -1,4 +1,4 @@
-import { Reducer, updateElement } from "~/components/cv/state/reducer";
+import { type Reducer, updateElement } from "~/components/cv/state/reducer";
 
 const SetText = Symbol.for("SetText");
 export const setText = (id: string, text: string) =>

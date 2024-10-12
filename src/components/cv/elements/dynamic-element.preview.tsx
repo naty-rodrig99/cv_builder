@@ -1,7 +1,7 @@
 import React from "react";
 import { SimpleTextPreview } from "./simple-text/simple-text.preview";
 import { SimpleLayoutPreview } from "./simple-layout/simple-layout.preview";
-import { AnyElement } from "../schema";
+import { type AnyElement } from "../schema";
 
 export interface DynamicElementEditProps {
   elementType: AnyElement["type"];

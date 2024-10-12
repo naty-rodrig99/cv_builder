@@ -1,11 +1,11 @@
 "use server";
 
 import { generateIdFromEntropySize } from "lucia";
-import { actionError, actionOk, ActionResult } from "~/lib/action-result";
+import { actionError, actionOk, type ActionResult } from "~/lib/action-result";
 import { db } from "~/server/db";
 import { cvTable } from "~/server/db/schema";
 import { getUser } from "~/server/user";
-import { cvSchema, CvSchema } from "~/components/cv/schema";
+import { cvSchema, type CvSchema } from "~/components/cv/schema";
 import { eq } from "drizzle-orm";
 import { newSchema } from "~/components/cv/schema.template";
 import { redirect } from "next/navigation";
@@ -31,7 +31,7 @@ export async function createNewProject(): ActionResult<
     cvData: newSchema({ elements: [] }),
   };
   try {
-    const result = await db.insert(cvTable).values(cvValues).returning();
+    await db.insert(cvTable).values(cvValues).returning();
   } catch {
     return actionError({
       message: "Error while inserting data to the db",

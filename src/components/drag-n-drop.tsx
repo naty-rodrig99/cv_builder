@@ -1,4 +1,4 @@
-import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
+import { type DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
 import React from "react";
 

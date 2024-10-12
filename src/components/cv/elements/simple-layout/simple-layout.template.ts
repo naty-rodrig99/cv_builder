@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
-import { SimpleLayoutElement } from "./simple-layout.schema";
-import { ElementTemplate, template } from "~/components/cv/schema.template";
+import { type SimpleLayoutElement } from "./simple-layout.schema";
+import { type ElementTemplate, template } from "~/components/cv/schema.template";
 
 export const newSimpleLayoutElement = (args: {
   direction?: "vertical" | "horizontal";

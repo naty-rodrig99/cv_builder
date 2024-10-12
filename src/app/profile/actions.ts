@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { actionError, actionOk, ActionResult } from "~/lib/action-result";
+import { actionError, actionOk, type ActionResult } from "~/lib/action-result";
 import { db } from "~/server/db";
 import { userTable } from "~/server/db/schema";
 import { getUser } from "~/server/user";
@@ -32,7 +32,7 @@ export async function saveProfile(
 ): ActionResult<null, { message: string; details?: unknown }> {
   try {
     const user = await getUser();
-    if (user === null) {
+    if (user == null) {
       return actionError({
         message: "Not authenticated.",
       });
@@ -54,7 +54,7 @@ export async function saveProfile(
 
     const birthDate = new Date(birthDateUnix * 1000);
 
-    const update = await db
+    await db
       .update(userTable)
       .set({
         fullName: result.data.fullName,
@@ -81,7 +81,7 @@ export async function fetchUser(): ActionResult<
 > {
   try {
     const user = await getUser();
-    if (user === null) {
+    if (user == null) {
       return actionError({ message: "Not authenticated!" });
     }
 

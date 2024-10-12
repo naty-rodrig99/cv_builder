@@ -1,7 +1,7 @@
 // This hook is based on https://www.developerway.com/posts/debouncing-in-react
 
 import { useRef, useEffect, useMemo } from "react";
-import { debounce, DebouncedFunc } from "lodash";
+import { debounce, type DebouncedFunc } from "lodash";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useDebounce = <Fn extends (...args: any[]) => any>(

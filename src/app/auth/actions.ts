@@ -10,7 +10,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { actionError, actionOk, ActionResult } from "~/lib/action-result";
+import { actionError, actionOk, type ActionResult } from "~/lib/action-result";
 import { notEmpty } from "~/lib/zod";
 
 // Exported async functions are turned into API calls so their arguments must be serializable.

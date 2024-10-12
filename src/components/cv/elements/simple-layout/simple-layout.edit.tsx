@@ -3,8 +3,8 @@ import DynamicElementEdit from "~/components/cv/elements/dynamic-element.edit";
 import { cn } from "~/lib/utils";
 import {
   SIMPLE_LAYOUT_DIRECTIONS,
-  SimpleLayoutDirections,
-  SimpleLayoutElement,
+  type SimpleLayoutDirections,
+  type SimpleLayoutElement,
 } from "./simple-layout.schema";
 import { useDispatch } from "~/components/cv/context";
 import {
@@ -13,7 +13,7 @@ import {
   setDirection,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import { DropZone } from "~/components/drag-n-drop";
-import { AnyElement } from "../../schema";
+import { type AnyElement } from "../../schema";
 import { EditionTools, selectOneOption } from "../editor-tools";
 
 export interface SimpleLayoutEditProps {

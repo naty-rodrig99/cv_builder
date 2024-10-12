@@ -1,4 +1,4 @@
-import { PageProps } from "~/lib/page-props";
+import { type PageProps } from "~/lib/page-props";
 import { getUser } from "~/server/user";
 import { notFound, redirect } from "next/navigation";
 import { routeLogin, routeProjectExport } from "~/app/routes";

@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { EditorState } from "lexical";
+import { type EditorState } from "lexical";
 import { useEffect } from "react";
 
 interface SimpleTextOnChangePluginProps {

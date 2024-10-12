@@ -5,7 +5,7 @@ import {
   $isRangeSelection,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  LexicalEditor,
+  type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";

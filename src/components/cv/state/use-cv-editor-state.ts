@@ -1,11 +1,11 @@
 "use client";
 
 import { useReducer } from "react";
-import { CvSchema } from "~/components/cv/schema";
+import { type CvSchema } from "~/components/cv/schema";
 import {
   cvStateReducer,
   initialCvBuilderState,
-  initialCvBuilderStateProps,
+  type initialCvBuilderStateProps,
 } from "~/components/cv/state/reducer";
 
 export const useCvEditorState = (

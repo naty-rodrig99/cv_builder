@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useMemo } from "react";
 
-import { EditorState } from "lexical";
+import { type EditorState } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import {
-  InitialConfigType,
+  type InitialConfigType,
   LexicalComposer,
 } from "@lexical/react/LexicalComposer";
 import { useStableCallback } from "~/lib/useStableCallback";
@@ -33,7 +33,7 @@ export const DEFAULT_EDITOR_STATE = `{
   }
 }`;
 
-export interface texteditorcontext {
+export interface TextEditorContext {
   onEditorChange: (editorState: EditorState) => void;
 }
 

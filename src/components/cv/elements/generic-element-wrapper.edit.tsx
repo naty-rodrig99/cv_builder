@@ -1,5 +1,5 @@
-import { DraggableAttributes } from "@dnd-kit/core";
-import { forwardRef, MouseEventHandler } from "react";
+import { type DraggableAttributes } from "@dnd-kit/core";
+import { forwardRef, type MouseEventHandler } from "react";
 import { cn } from "~/lib/utils";
 import { useSelector } from "../context";
 

@@ -1,4 +1,4 @@
-import { AnyElement } from "../schema";
+import { type AnyElement } from "../schema";
 import { newSimpleLayoutElement } from "./simple-layout/simple-layout.template";
 import { newSimpleTextElement } from "./simple-text/simple-text.template";
 
