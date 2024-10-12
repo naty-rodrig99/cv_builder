@@ -1,13 +1,13 @@
 import {
-  CvBuilderState,
-  Reducer,
+  type CvBuilderState,
+  type Reducer,
   removeFromParent,
   updateElement,
 } from "~/components/cv/state/reducer";
-import { AnyElement } from "../../schema";
+import { type AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
 import {
-  SimpleLayoutDirections,
+  type SimpleLayoutDirections,
   SimpleLayoutElement,
 } from "./simple-layout.schema";
 
@@ -79,13 +79,14 @@ export const simpleLayoutReducer: Reducer = (state, action) => {
     }
     case MoveElement: {
       if (action.payload.sourceId === state.schema.rootElement) return state;
-      const index =
-        state.schema.elements[
-          action.payload.targetId
-        ]?.slots!?.children.indexOf(action.payload.sourceId) <
-        action.payload.index
-          ? action.payload.index - 1
-          : action.payload.index;
+      const siblings =
+        state.schema.elements[action.payload.targetId]?.slots?.children;
+      const movedForward =
+        siblings &&
+        siblings.indexOf(action.payload.sourceId) < action.payload.index;
+      const index = movedForward
+        ? action.payload.index - 1
+        : action.payload.index;
       const nextState = insertElement(
         action.payload.sourceId,
         action.payload.targetId,

@@ -1,5 +1,5 @@
 import { newSimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.template";
-import { CvSchema } from "~/components/cv/schema";
+import type { CvSchema } from "~/components/cv/schema";
 import { newSchema } from "~/components/cv/schema.template";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";

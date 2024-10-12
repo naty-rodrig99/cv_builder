@@ -1,4 +1,4 @@
-import { Reducer, updateElement } from "~/components/cv/state/reducer";
+import { type Reducer, updateElement } from "~/components/cv/state/reducer";
 import { SimpleTextElement } from "./simple-text.schema";
 
 const SetText = Symbol.for("SetText");

@@ -1,14 +1,37 @@
 import React, { useContext, useEffect, useMemo } from "react";
 
-import { EditorState } from "lexical";
+import { type EditorState } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import {
-  InitialConfigType,
+  type InitialConfigType,
   LexicalComposer,
 } from "@lexical/react/LexicalComposer";
+import { useStableCallback } from "~/lib/useStableCallback";
+
+export const DEFAULT_EDITOR_STATE = `{
+  "root": {
+    "children": [
+      {
+        "children": [],
+        "direction": null,
+        "format": "",
+        "indent": 0,
+        "type": "paragraph",
+        "version": 1,
+        "textformat": 0,
+        "textstyle": ""
+      }
+    ],
+    "direction": null,
+    "format": "",
+    "indent": 0,
+    "type": "root",
+    "version": 1
+  }
+}`;
 
 export interface TextEditorContext {
   onEditorChange: (editorState: EditorState) => void;
@@ -16,7 +39,7 @@ export interface TextEditorContext {
 
 const textEditorContext = React.createContext<TextEditorContext | null>(null);
 
-export function retrieveTextEditorOnChange() {
+export function useTextEditorOnChange() {
   const ctx = useContext(textEditorContext);
   if (ctx == null) {
     throw new Error(
@@ -49,12 +72,12 @@ export const TextEditorContextProvider = ({
   onTextChange,
   children,
 }: TextEditorContextProviderProps) => {
-  const ctxValue = useMemo(() => ({ onEditorChange }), [onEditorChange]);
-
-  function onEditorChange(editorState: EditorState) {
+  const onEditorChange = useStableCallback((editorState: EditorState) => {
     const editorStateJSON = editorState.toJSON();
     onTextChange(JSON.stringify(editorStateJSON));
-  }
+  });
+
+  const ctxValue = useMemo(() => ({ onEditorChange }), [onEditorChange]);
 
   return (
     <textEditorContext.Provider value={ctxValue}>
@@ -69,6 +92,7 @@ export interface TextEditorProps {
   placeholder: string;
 }
 export const TextEditor = ({ placeholder }: TextEditorProps) => {
+  const textEditorOnChange = useTextEditorOnChange();
   return (
     <div className="relative p-2">
       <div className="editor-inner w-full resize-none border-none bg-green-50 shadow-none">
@@ -84,7 +108,7 @@ export const TextEditor = ({ placeholder }: TextEditorProps) => {
           }
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <MyOnChangePlugin onChange={retrieveTextEditorOnChange()} />
+        <MyOnChangePlugin onChange={textEditorOnChange} />
       </div>
     </div>
   );

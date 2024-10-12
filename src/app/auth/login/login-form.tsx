@@ -29,29 +29,28 @@ function DisplayInvalidDataError({ errorMessage }: InvalidDataProps) {
 }
 
 function LoginForm() {
-  // The three next lines should be taken apart in a presenter component, keeping them here is reasonable
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const search = useSearchParams();
 
+  const onSubmit = async (formData: FormData) => {
+    try {
+      const result = await logIn(formData);
+      const redirectUrl = search.get("redirectTo") || "/";
+      if (result.ok) router.replace(redirectUrl);
+      else {
+        console.error(result.error);
+        setErrorMessage(result.error.message);
+      }
+    } catch (e) {
+      // Todo: Properly handle likely network error.
+      console.error(e);
+    }
+  };
+
   return (
     <Card className="w-full max-w-sm">
-      <form
-        action={async (formData) => {
-          try {
-            const result = await logIn(formData);
-            const redirectUrl = search.get("redirectTo") || "/";
-            if (result.ok) router.replace(redirectUrl);
-            else {
-              console.error(result.error);
-              setErrorMessage(result.error.message);
-            }
-          } catch (e) {
-            // Todo: Properly handle likely network error.
-            console.error(e);
-          }
-        }}
-      >
+      <form action={onSubmit}>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>

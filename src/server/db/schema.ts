@@ -4,7 +4,6 @@
 import { sql } from "drizzle-orm";
 import {
   blob,
-  index,
   int,
   sqliteTableCreator,
   text,

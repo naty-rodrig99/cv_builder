@@ -4,7 +4,6 @@ import { routeLogin, routeProjects } from "~/app/routes";
 import { Label } from "~/components/ui/label";
 import ProjectsList from "./projects-list";
 import { createNewProject, deleteProject } from "./actions";
-import { useState } from "react";
 
 export default async function ProjectsPage() {
   const user = await getUser();

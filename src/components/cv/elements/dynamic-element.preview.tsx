@@ -1,7 +1,7 @@
 import React from "react";
 import { SimpleTextPreview } from "./simple-text/simple-text.preview";
 import { SimpleLayoutPreview } from "./simple-layout/simple-layout.preview";
-import { AnyElement } from "../schema";
+import { type AnyElement } from "../schema";
 import { SimpleHeaderPreview } from "./simple-header/simple-header.preview";
 import { ProfileElementPreview } from "./profile-element/profile-element.preview";
 

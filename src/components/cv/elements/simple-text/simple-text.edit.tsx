@@ -1,10 +1,11 @@
 import React from "react";
 import "./text-edit-styles.css";
-import { SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
+import { type SimpleTextElement } from "~/components/cv/elements/simple-text/simple-text.schema";
 import { customOption, EditionTools } from "../editor-tools";
 
 import TextToolbar from "./toolbar-text.edit";
 import {
+  DEFAULT_EDITOR_STATE,
   TextEditor,
   TextEditorContextProvider,
 } from "~/components/text-editor";
@@ -30,7 +31,7 @@ const SimpleTextEdit = ({ element }: SimpleTextEditProps) => {
     onError(error: Error) {
       throw error;
     },
-    editorState: safeJSON(element.data.text),
+    editorState: safeJSON(element.data.text, DEFAULT_EDITOR_STATE),
   };
 
   return (

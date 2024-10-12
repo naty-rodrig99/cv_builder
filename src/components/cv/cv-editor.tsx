@@ -7,7 +7,7 @@ import {
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
-import { H1, H3, P } from "~/components/ui/typography";
+import { H1, H3 } from "~/components/ui/typography";
 import {
   type AnyElement,
   cvFormats,

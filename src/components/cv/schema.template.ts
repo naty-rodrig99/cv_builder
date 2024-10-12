@@ -1,4 +1,4 @@
-import { AnyElement, CvSchema } from "~/components/cv/schema";
+import { type AnyElement, type CvSchema } from "~/components/cv/schema";
 import { newSimpleLayoutElement } from "~/components/cv/elements/simple-layout/simple-layout.template";
 
 export type ElementTemplate = [AnyElement, Record<string, AnyElement>];
@@ -11,7 +11,7 @@ export const newSchema = (args: { elements: ElementTemplate[] }) => {
 
   return {
     format: "DINA4",
-    theme: "minimalistic",
+    // theme: "minimalistic",
     rootElement: rootElement.id,
     elements,
   } satisfies CvSchema;

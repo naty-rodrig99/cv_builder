@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useMemo } from "react";
-import { AnyAction, CvBuilderState } from "~/components/cv/state/reducer";
+import { type AnyAction, type CvBuilderState } from "~/components/cv/state/reducer";
 
 export interface CvBuilderContext {
   state: CvBuilderState;

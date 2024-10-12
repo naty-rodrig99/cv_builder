@@ -9,12 +9,10 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
-import { createNewProject, deleteProject } from "./actions";
 import Link from "next/link";
 import { routeProject } from "../routes";
 import { cn } from "~/lib/utils";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
 
 export interface ProjectsListProps {
   projects: { id: string; name: string }[];
@@ -26,7 +24,6 @@ export default function ProjectsList({
   newProject,
   deleteProject,
 }: ProjectsListProps) {
-  const [projectList, setProjectList] = useState(projects);
 
   return (
     <Card>
@@ -53,7 +50,6 @@ export default function ProjectsList({
               className="tiny"
               onClick={() => {
                 deleteProject(project.id);
-                setProjectList(projectList.splice(i, 1));
               }}
             >
               <TrashIcon />
@@ -62,7 +58,13 @@ export default function ProjectsList({
         ))}
       </CardContent>
       <CardFooter>
-        <Button onClick={newProject}>Create a new CV</Button>
+        <Button
+          onClick={() => {
+            newProject();
+          }}
+        >
+          Create a new CV
+        </Button>
       </CardFooter>
     </Card>
   );

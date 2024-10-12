@@ -1,10 +1,14 @@
-import { AnyElement, CvFormat, CvSchema } from "~/components/cv/schema";
 import {
-  SimpleTextActions,
+  type AnyElement,
+  type CvFormat,
+  type CvSchema,
+} from "~/components/cv/schema";
+import {
+  type SimpleTextActions,
   simpleTextReducer,
 } from "~/components/cv/elements/simple-text/simple-text.state";
 import {
-  SimpleLayoutActions,
+  type SimpleLayoutActions,
   simpleLayoutReducer,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
@@ -50,12 +54,12 @@ export const removeFromParent =
     if (id === state.schema.rootElement) return state;
 
     const elements = state.schema.elements;
-    let newElements: Record<string, AnyElement> = { ...elements };
-    for (let key in elements) {
+    const newElements: Record<string, AnyElement> = { ...elements };
+    for (const key in elements) {
       const el = elements[key];
       if (!el || el?.id === id) continue;
       if (el.slots && el.slots.children.indexOf(id) > -1) {
-        let newChildren = [...el.slots.children];
+        const newChildren = [...el.slots.children];
         const index = newChildren.indexOf(id, 0);
         if (index > -1) {
           newChildren.splice(index, 1);
@@ -83,11 +87,11 @@ const removeSelf =
     const element = state.schema.elements[id];
 
     const elements = state.schema.elements;
-    let newElements: Record<string, AnyElement> = { ...elements };
+    const newElements: Record<string, AnyElement> = { ...elements };
     delete newElements[id];
 
     let newState = { ...state };
-    for (let el in element?.slots) newState = removeElement(el)(newState); //recursively removes children
+    for (const el in element?.slots) newState = removeElement(el)(newState); //recursively removes children
 
     return {
       ...newState,

@@ -1,5 +1,5 @@
-import { DraggableAttributes } from "@dnd-kit/core";
-import { forwardRef, LegacyRef, MouseEventHandler } from "react";
+import { type DraggableAttributes } from "@dnd-kit/core";
+import { forwardRef, type MouseEventHandler } from "react";
 import { cn } from "~/lib/utils";
 import { useSelector } from "../context";
 
@@ -9,11 +9,8 @@ export interface ElementWrapperEditProps {
   onClick: MouseEventHandler<HTMLDivElement>;
   children: React.ReactNode;
 }
-const ElementWrapperEdit = forwardRef(
-  (
-    { elementId, attributes, onClick, children }: ElementWrapperEditProps,
-    ref: LegacyRef<HTMLDivElement>,
-  ) => {
+const ElementWrapperEdit = forwardRef<HTMLDivElement, ElementWrapperEditProps>(
+  ({ elementId, attributes, onClick, children }, ref) => {
     const isSelected = useSelector((state) => state.selection) === elementId;
     return (
       <div
@@ -31,4 +28,5 @@ const ElementWrapperEdit = forwardRef(
   },
 );
 
+ElementWrapperEdit.displayName = "ElementWrapperEdit";
 export default ElementWrapperEdit;

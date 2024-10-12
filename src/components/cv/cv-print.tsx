@@ -2,7 +2,7 @@
 
 import React from "react";
 import DynamicElementPrint from "~/components/cv/elements/dynamic-element.print";
-import { CvSchema } from "~/components/cv/schema";
+import { type CvSchema } from "~/components/cv/schema";
 import { useCvEditorState } from "~/components/cv/state/use-cv-editor-state";
 import { CvBuilderContextProvider } from "~/components/cv/context";
 import { Button } from "~/components/ui/button";
@@ -24,7 +24,7 @@ const CvPrint = ({ projectId, name, schema }: CvPrintProps) => {
   const paperSize = state.schema.format;
 
   return (
-    <CvBuilderContextProvider state={state} dispatch={() => {}}>
+    <CvBuilderContextProvider state={state} dispatch={() => void 0}>
       <header className="w-full space-y-6 p-10 pb-0 pt-16 print:hidden">
         <div className="flex w-full">
           <div className="space-y-">

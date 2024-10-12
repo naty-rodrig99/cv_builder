@@ -8,15 +8,16 @@ import {
   MenubarTrigger,
 } from "~/components/ui/menubar";
 import { useDispatch, useSelector } from "../context";
-import { SimpleLayoutElement } from "./simple-layout/simple-layout.schema";
-import { SimpleTextElement } from "./simple-text/simple-text.schema";
+import { type SimpleLayoutElement } from "./simple-layout/simple-layout.schema";
+import { type SimpleTextElement } from "./simple-text/simple-text.schema";
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
 import { TrashIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { deleteElement } from "../state/reducer";
-import { retrieveElementContext } from "./element-context";
-import React, { useId } from "react";
-import { AnyElement } from "../schema";
+import { useElementContext } from "./element-context";
+import React from "react";
+import { type AnyElement } from "../schema";
+import { nanoid } from "nanoid";
 import { SimpleHeaderElement } from "./simple-header/simple-header.schema";
 
 // Instead of using different Option types, it is actually easier to only use customOptions
@@ -75,7 +76,7 @@ const OptionLayout = ({ option, element }: OptionLayoutProps) => {
               onValueChange={
                 option.action
                   ? (value) => option.action!(value as typeof value)
-                  : () => {}
+                  : void 0
               }
             >
               {option.optionList.map((op) => (
@@ -104,12 +105,11 @@ interface EditionToolsProps {
   options: Option[];
 }
 export function EditionTools({ element, options }: EditionToolsProps) {
-  if (!element) return null;
   const isSelected = useSelector((state) => state.selection) === element.id;
   const dispatch = useDispatch();
   const rootElement = useSelector((state) => state.schema.rootElement);
-
-  const { listeners, setActivatorNodeRef } = retrieveElementContext(element.id);
+  const { listeners, setActivatorNodeRef } = useElementContext(element.id);
+  if (!element) return null;
 
   return (
     <Menubar
@@ -132,7 +132,7 @@ export function EditionTools({ element, options }: EditionToolsProps) {
       </MenubarMenu>
       {/* TODO: make this a user friendly name*/}
       {options.map((option) => (
-        <div key={useId()}>
+        <div key={nanoid()}>
           <Separator orientation="vertical" />
           <OptionLayout element={element} option={option} />
         </div>

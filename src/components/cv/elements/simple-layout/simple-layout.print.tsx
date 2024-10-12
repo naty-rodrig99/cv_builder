@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "~/lib/utils";
 import DynamicElementPrint from "~/components/cv/elements/dynamic-element.print";
-import { SimpleLayoutElement } from "./simple-layout.schema";
+import { type SimpleLayoutElement } from "./simple-layout.schema";
 
 export interface SimpleLayoutPrintProps {
   element: SimpleLayoutElement;

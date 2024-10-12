@@ -36,7 +36,6 @@ function SignupForm() {
         action={async (formData) => {
           const result = await signUp(formData);
           if (!result.ok) {
-            // Todo: Show the error to the user.
             console.error(result.error);
             setErrorMessage(result.error.message);
           }

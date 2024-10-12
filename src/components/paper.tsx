@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "~/components/ui/card";
-import { CvFormat } from "~/components/cv/schema";
+import { type CvFormat } from "~/components/cv/schema";
 import { cn } from "~/lib/utils";
 
 export function format2aspectRatio(format: CvFormat) {

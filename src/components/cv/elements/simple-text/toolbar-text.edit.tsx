@@ -5,17 +5,10 @@ import {
   $isRangeSelection,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  LexicalEditor,
+  type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import {
-  forwardRef,
-  LegacyRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
 const LowPriority = 1;
 
@@ -57,7 +50,6 @@ export default function TextToolbar() {
       ),
     );
   }, [editor, $updateToolbar]);
-  editor.dispatchCommand;
 
   return (
     <TextToolbarView
@@ -68,15 +60,12 @@ export default function TextToolbar() {
   );
 }
 
-interface textToolbarViewProps {
+interface TextToolbarViewProps {
   editor: LexicalEditor;
   textState: { isBold: boolean; isItalic: boolean; isUnderline: boolean };
 }
-const TextToolbarView = forwardRef(
-  (
-    { editor, textState }: textToolbarViewProps,
-    ref: LegacyRef<HTMLDivElement>,
-  ) => {
+const TextToolbarView = forwardRef<HTMLDivElement, TextToolbarViewProps>(
+  ({ editor, textState }, ref) => {
     const { isBold, isItalic, isUnderline } = textState;
     return (
       <div ref={ref} className="toolbar">
@@ -143,8 +132,10 @@ const TextToolbarView = forwardRef(
           aria-label="Justify Align"
         >
           <i className="format justify-align" />
-        </button>{" "}
+        </button>
       </div>
     );
   },
 );
+
+TextToolbarView.displayName = "TextToolbarView";

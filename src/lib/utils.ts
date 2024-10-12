@@ -5,14 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const safeJSON = (input: string): string | null => {
+export const safeJSON = (input: string, def?: string) => {
   try {
     const parsed = JSON.parse(input);
     if (parsed && typeof parsed === "object") {
       return input;
     }
   } catch {
-    return null;
+    return def!;
   }
-  return null;
+  return def!;
 };

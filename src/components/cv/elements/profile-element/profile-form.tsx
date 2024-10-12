@@ -146,7 +146,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
           />
         </div>
 
-        <div>Placeholder for errors</div>
+        <div id="error-placeholder"></div>
       </CardContent>
     </Card>
   );
