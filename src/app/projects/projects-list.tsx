@@ -19,13 +19,15 @@ import { useState } from "react";
 export interface ProjectsListProps {
   projects: { id: string; name: string }[];
   newProject: () => void;
-  deleteProject: (projectId: string, index: number) => void;
+  deleteProject: (projectId: string) => void;
 }
 export default function ProjectsList({
   projects,
   newProject,
   deleteProject,
 }: ProjectsListProps) {
+  const [projectList, setProjectList] = useState(projects);
+
   return (
     <Card>
       <CardHeader>
@@ -49,7 +51,10 @@ export default function ProjectsList({
             <Button
               variant="ghost"
               className="tiny"
-              onClick={() => deleteProject(project.id, i)}
+              onClick={() => {
+                deleteProject(project.id);
+                setProjectList(projectList.splice(i, 1));
+              }}
             >
               <TrashIcon />
             </Button>

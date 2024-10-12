@@ -21,20 +21,13 @@ export default async function ProjectsPage() {
       </main>
     );
   }
-  const [projectList, setProjectList] = useState(projects);
 
   return (
     <main className="flex h-screen w-full items-center justify-center bg-background px-4">
       <ProjectsList
         projects={projects}
-        newProject={async () => {
-          await createNewProject();
-        }}
-        deleteProject={async (projectId, index) => {
-          await deleteProject(projectId).then(() =>
-            setProjectList(projectList.splice(index, 1)),
-          );
-        }}
+        newProject={createNewProject}
+        deleteProject={deleteProject}
       />
     </main>
   );
