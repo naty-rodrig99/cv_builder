@@ -13,7 +13,6 @@ import Link from "next/link";
 import { routeProject } from "../routes";
 import { cn } from "~/lib/utils";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
 
 export interface ProjectsListProps {
   projects: { id: string; name: string }[];
@@ -25,8 +24,6 @@ export default function ProjectsList({
   newProject,
   deleteProject,
 }: ProjectsListProps) {
-  // Todo: Remove duplicated state here.
-  const [projectList, setProjectList] = useState(projects);
 
   return (
     <Card>
@@ -53,7 +50,6 @@ export default function ProjectsList({
               className="tiny"
               onClick={() => {
                 deleteProject(project.id);
-                setProjectList(projectList.splice(i, 1));
               }}
             >
               <TrashIcon />

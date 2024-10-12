@@ -9,6 +9,8 @@ import { cvSchema, type CvSchema } from "~/components/cv/schema";
 import { eq } from "drizzle-orm";
 import { newSchema } from "~/components/cv/schema.template";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { routeProjects } from "../routes";
 
 export async function createNewProject(): ActionResult<
   null,
@@ -67,6 +69,7 @@ export async function deleteProject(
 
   await db.delete(cvTable).where(eq(cvTable.id, cvId));
 
+  revalidatePath(routeProjects());
   return actionOk(null);
 }
 
