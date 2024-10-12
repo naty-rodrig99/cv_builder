@@ -1,4 +1,4 @@
-import { ProfileElement } from "./profile-element.schema";
+import { type ProfileElement } from "./profile-element.schema";
 
 export interface ProfileElementEditProps {
   element: ProfileElement;

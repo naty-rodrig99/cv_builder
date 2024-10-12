@@ -13,6 +13,7 @@ const config = {
   ],
   rules: {
     "react/no-unescaped-entities": "off",
+    "@typescript-eslint/ no-explicit-any": "off",
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/consistent-type-imports": [
