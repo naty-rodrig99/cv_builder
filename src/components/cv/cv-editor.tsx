@@ -84,7 +84,7 @@ const EditPanel = () => {
   const format = useSelector((state) => state.schema.format);
   const zoom = useSelector((state) => state.zoom);
 
-  console.log("rootElement in EditPanel: ", rootElement);
+  //console.log("rootElement in EditPanel: ", rootElement);
 
   return (
     <ScrollArea className={cn("size-full", "flex", "justify-center")}>

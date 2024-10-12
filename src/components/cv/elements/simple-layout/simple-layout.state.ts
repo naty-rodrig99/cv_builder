@@ -6,7 +6,10 @@ import {
 } from "~/components/cv/state/reducer";
 import { AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
-import { SimpleLayoutDirections } from "./simple-layout.schema";
+import {
+  SimpleLayoutDirections,
+  SimpleLayoutElement,
+} from "./simple-layout.schema";
 
 const SetDirection = Symbol.for("SetDirection");
 export const setDirection = (id: string, direction: SimpleLayoutDirections) =>
@@ -48,10 +51,14 @@ export type SimpleLayoutActions =
 export const simpleLayoutReducer: Reducer = (state, action) => {
   switch (action.type) {
     case SetDirection: {
-      return updateElement("simple-layout", action.payload.id, (el) => ({
-        ...el,
-        options: { ...el.options, direction: action.payload.direction },
-      }));
+      return updateElement(
+        "simple-layout",
+        action.payload.id,
+        (el: SimpleLayoutElement) => ({
+          ...el,
+          options: { ...el.options, direction: action.payload.direction },
+        }),
+      );
     }
     case InsertNewElement: {
       const newElementTemplate = createElement(action.payload.elementType);
