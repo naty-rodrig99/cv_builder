@@ -50,7 +50,7 @@ export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
         className={cn(
           "outline-radius-5 invisible absolute left-0 right-0 top-0 h-[10px]",
           isOver &&
-            "visible bg-green-200 bg-opacity-80 outline-dashed outline-border",
+            "visible bg-orange-300 bg-opacity-80 outline-dashed outline-border",
         )}
       />
     </div>
