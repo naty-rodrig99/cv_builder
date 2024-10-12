@@ -13,11 +13,7 @@ export function Droppable<E extends string>({
     id: id,
   });
 
-  return (
-    <div ref={setNodeRef} className="flex-1">
-      {children}
-    </div>
-  );
+  return <div ref={setNodeRef}>{children}</div>;
 }
 
 interface DropZoneProps<E> {
@@ -26,12 +22,7 @@ interface DropZoneProps<E> {
   direction: "horizontal" | "vertical";
   hasChildren: boolean;
 }
-export function DropZone<E extends string>({
-  id,
-  onDrop,
-  direction,
-  hasChildren,
-}: DropZoneProps<E>) {
+export function DropZone<E extends string>({ id, onDrop }: DropZoneProps<E>) {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
   });
@@ -50,6 +41,7 @@ export function DropZone<E extends string>({
   console.log(`Direction: ${direction}`);
   */
 
+  // Display/view of the DropZone
   return (
     <div id={id} className={cn("relative z-20 flex-1 bg-yellow-200")}>
       <div

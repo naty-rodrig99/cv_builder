@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { routeLogin, routeProjects } from "~/app/routes";
 import { Label } from "~/components/ui/label";
 import ProjectsList from "./projects-list";
+import { createNewProject, deleteProject } from "./actions";
+import { useState } from "react";
 
 export default async function ProjectsPage() {
   const user = await getUser();
@@ -22,7 +24,11 @@ export default async function ProjectsPage() {
 
   return (
     <main className="flex h-screen w-full items-center justify-center bg-background px-4">
-      <ProjectsList projects={projects} />
+      <ProjectsList
+        projects={projects}
+        newProject={createNewProject}
+        deleteProject={deleteProject}
+      />
     </main>
   );
 }

@@ -8,6 +8,9 @@ export const routeLogin = (params?: { redirectTo?: string }) => {
 };
 export const routeSignup = () => routeAuth() + "/signup";
 
+// Profile route
+export const routeProfile = () => routeRoot() + "/profile";
+
 // Project Routes
 export const routeProjects = () => routeRoot() + "/projects";
 export const routeProject = (projectId = ":projectId") =>

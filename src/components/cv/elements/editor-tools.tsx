@@ -19,11 +19,12 @@ import React, { useId } from "react";
 import { AnyElement } from "../schema";
 import { SimpleHeaderElement } from "./simple-header/simple-header.schema";
 
+// Instead of using different Option types, it is actually easier to only use customOptions
+// It would be nice to refactor the code so that this Option selection disappear.
 type DynamicElement =
   | SimpleLayoutElement
   | SimpleTextElement
   | SimpleHeaderElement;
-
 type SelectOneOptions<SelOne> = {
   type: "select-one";
   optionName: string;
@@ -31,14 +32,11 @@ type SelectOneOptions<SelOne> = {
   action?: (value: SelOne) => void;
   optionDefault?: string;
 };
-
 type CustomOptions = {
   type: "custom";
-  children: React.ReactNode;
+  children: React.ReactNode; // there should be a better name than children, maybe component?
 };
-
-type Option = SelectOneOptions<any> | CustomOptions;
-
+export type Option = SelectOneOptions<any> | CustomOptions;
 export function selectOneOption<SelOne>(
   optionName: string,
   optionList: SelOne[],

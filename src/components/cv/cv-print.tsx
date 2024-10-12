@@ -15,11 +15,12 @@ import { ChevronLeftIcon, PrinterIcon } from "lucide-react";
 
 export interface CvPrintProps {
   projectId: string;
+  name: string;
   schema: CvSchema;
 }
 
-const CvPrint = ({ projectId, schema }: CvPrintProps) => {
-  const [state] = useCvEditorState(schema);
+const CvPrint = ({ projectId, name, schema }: CvPrintProps) => {
+  const [state] = useCvEditorState(name, schema);
   const paperSize = state.schema.format;
 
   return (

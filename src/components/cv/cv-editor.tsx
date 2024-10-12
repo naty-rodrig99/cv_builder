@@ -24,7 +24,7 @@ import { DndContext, DragOverlay, useDraggable } from "@dnd-kit/core";
 import { cn } from "~/lib/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import { setFormat, zoom } from "./state/reducer";
+import { setFormat, setName, zoom } from "./state/reducer";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
@@ -63,7 +63,6 @@ const ElementPanel = () => {
   return (
     <ScrollArea className={cn("size-full", "p-8")}>
       <H3>Elements Panel</H3>
-      <P>Todo: Enable drag and drop, creating new elements, etc.</P>
       <br />
       <ul className="flex flex-col gap-4">
         {ELEMENT_LIST.map((type) => {
@@ -159,68 +158,90 @@ const FormatSelector = () => {
   );
 };
 
+interface EditorHeaderProps {
+  projectName: string;
+  projectId: string;
+  onRename: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  saving: boolean;
+  onSave: () => void;
+}
+export const EditorHeader = ({
+  projectName,
+  projectId,
+  onRename,
+  saving,
+  onSave,
+}: EditorHeaderProps) => {
+  return (
+    <header className="flex flex-row justify-between p-8">
+      <H1>
+        <input value={projectName} onChange={onRename}></input>
+      </H1>
+      <FormatSelector />
+      <Button variant="secondary" disabled={saving} onClick={onSave}>
+        {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
+        Save
+      </Button>
+      <Button asChild>
+        <Link href={routeProjectExport(projectId)}>Export</Link>
+      </Button>
+    </header>
+  );
+};
+
 export interface CvEditorProps {
   projectId: string;
   cv: {
     name: string;
     schema: CvSchema;
   };
-  saveAction: (schema: CvSchema) => Promise<void>;
+  saveAction: (cvData: {
+    name: string | null;
+    schema: CvSchema;
+  }) => Promise<void>;
 }
-
 const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
-  const [state, dispatch] = useCvEditorState(cv.schema);
+  const [state, dispatch] = useCvEditorState(cv.name, cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
   >(null);
 
   const [savingSchema, setSavingSchema] = useState(false);
 
-  console.log("state: ", state);
-  console.log("activeElementType: ", activeElementType);
+  const onSave = async () => {
+    setSavingSchema(true);
+    try {
+      await saveAction({
+        name: state.name,
+        schema: state.schema,
+      });
+      toast.success("You can rest now. Your CV is saved 😌");
+    } catch (error) {
+      console.error(error);
+      toast.error("We could not save your CV. Please try again later.", {
+        dismissible: true,
+        closeButton: true,
+      });
+    } finally {
+      setSavingSchema(false);
+    }
+  };
 
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
       <div className="flex size-full flex-col">
-        <header className="flex flex-row justify-between p-8">
-          <H1>{cv.name}</H1>
-          <FormatSelector />
-          <Button
-            variant="secondary"
-            disabled={savingSchema}
-            onClick={async () => {
-              setSavingSchema(true);
-              try {
-                await saveAction(state.schema);
-                toast.success("You can rest now. Your CV is save 😌");
-              } catch (error) {
-                console.error(error);
-                toast.error(
-                  "We could not save your CV. Please try again later.",
-                  {
-                    dismissible: true,
-                    closeButton: true,
-                  },
-                );
-              } finally {
-                setSavingSchema(false);
-              }
-            }}
-          >
-            {savingSchema && (
-              <Loader2Icon className="mr-2 size-4 animate-spin" />
-            )}
-            Save
-          </Button>
-          <Button asChild>
-            <Link href={routeProjectExport(projectId)}>Export</Link>
-          </Button>
-        </header>
+        <EditorHeader
+          projectName={state.name === null ? "Untitled CV" : state.name}
+          projectId={projectId}
+          onRename={(event) => dispatch(setName(event.target.value))}
+          saving={savingSchema}
+          onSave={onSave}
+        />
         <DndContext
           id={useId()}
-          onDragStart={(event) => {
-            setActiveElementType(event.active.id as AnyElement["type"]);
-          }}
+          onDragStart={(event) =>
+            setActiveElementType(event.active.id as AnyElement["type"])
+          }
           onDragEnd={() => setActiveElementType(null)}
         >
           <ResizablePanelGroup direction="horizontal">

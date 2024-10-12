@@ -9,15 +9,25 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
-import { createDummyProject } from "./actions";
+import { createNewProject, deleteProject } from "./actions";
 import Link from "next/link";
 import { routeProject } from "../routes";
 import { cn } from "~/lib/utils";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 export interface ProjectsListProps {
   projects: { id: string; name: string }[];
+  newProject: () => void;
+  deleteProject: (projectId: string) => void;
 }
-export default function ProjectsList({ projects }: ProjectsListProps) {
+export default function ProjectsList({
+  projects,
+  newProject,
+  deleteProject,
+}: ProjectsListProps) {
+  const [projectList, setProjectList] = useState(projects);
+
   return (
     <Card>
       <CardHeader>
@@ -25,7 +35,7 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
       </CardHeader>
       <CardContent>
         {projects.map((project, i) => (
-          <div key={i}>
+          <div key={i} className="space-between flex">
             <Link
               href={routeProject(project.id)}
               className={cn(
@@ -38,17 +48,21 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
             >
               <Label>{project.name}</Label>
             </Link>
+            <Button
+              variant="ghost"
+              className="tiny"
+              onClick={() => {
+                deleteProject(project.id);
+                setProjectList(projectList.splice(i, 1));
+              }}
+            >
+              <TrashIcon />
+            </Button>
           </div>
         ))}
       </CardContent>
       <CardFooter>
-        <Button
-          onClick={async () => {
-            await createDummyProject();
-          }}
-        >
-          Create one more
-        </Button>
+        <Button onClick={newProject}>Create a new CV</Button>
       </CardFooter>
     </Card>
   );

@@ -171,7 +171,7 @@ export const cvTable = createTable("CV", {
   updatedAt: int("updated_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),
-  cvName: text("cv_name").unique().notNull(),
+  cvName: text("cv_name").notNull(),
   cvData: text("cv_data", { mode: "json" }),
 });
 

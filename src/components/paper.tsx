@@ -3,6 +3,15 @@ import { Card } from "~/components/ui/card";
 import { CvFormat } from "~/components/cv/schema";
 import { cn } from "~/lib/utils";
 
+export function format2aspectRatio(format: CvFormat) {
+  switch (format) {
+    case "DINA4":
+      return "21/29.7";
+    case "Letter":
+      return "8.5/11";
+  }
+}
+
 export interface PaperProps extends React.HTMLProps<HTMLDivElement> {
   paperSize: CvFormat;
   children: React.ReactNode;
