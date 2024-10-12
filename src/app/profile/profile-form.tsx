@@ -50,11 +50,11 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
     const saveResult = await saveProfile(profileData);
     if (!saveResult.ok) {
       console.error("Failed to save profile data", saveResult.error);
-      // TODO: notify user nicely
-    } else {
-      // console.log("Profile saved successfully.");
-      // TODO: notify user nicely
-    }
+          // TODO: notify user nicely
+        } else {
+          // console.log("Profile saved successfully.");
+          // TODO: notify user nicely
+        }
   };
 
   const updateProfileField = (field: string, value: string) => {
@@ -146,7 +146,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
           />
         </div>
 
-        <div>Placeholder for errors</div>
+        <div id="error-placeholder"></div>
       </CardContent>
     </Card>
   );

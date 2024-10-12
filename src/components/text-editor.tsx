@@ -11,7 +11,29 @@ import {
 } from "@lexical/react/LexicalComposer";
 import { useStableCallback } from "~/lib/useStableCallback";
 
-export interface TextEditorContext {
+export const DEFAULT_EDITOR_STATE = `{
+  "root": {
+    "children": [
+      {
+        "children": [],
+        "direction": null,
+        "format": "",
+        "indent": 0,
+        "type": "paragraph",
+        "version": 1,
+        "textformat": 0,
+        "textstyle": ""
+      }
+    ],
+    "direction": null,
+    "format": "",
+    "indent": 0,
+    "type": "root",
+    "version": 1
+  }
+}`;
+
+export interface texteditorcontext {
   onEditorChange: (editorState: EditorState) => void;
 }
 
