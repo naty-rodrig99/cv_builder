@@ -4,6 +4,7 @@ import SimpleTextPrint from "~/components/cv/elements/simple-text/simple-text.pr
 import { useSelector } from "~/components/cv/context";
 import { selectElement } from "~/components/cv/state/selectors";
 import SimpleHeaderPrint from "./simple-header/simple-header.print";
+import ProfileElementPrint from "./profile-element/profile-element.print";
 
 export interface PrintDynamicElementProps {
   elementId: string;
@@ -20,6 +21,8 @@ const PrintDynamicElement = ({ elementId }: PrintDynamicElementProps) => {
       return <SimpleTextPrint element={element} />;
     case "simple-header":
       return <SimpleHeaderPrint element={element} />;
+    case "profile-element":
+      return <ProfileElementPrint element={element} />;
     default:
       return null;
   }

@@ -18,7 +18,7 @@ import { useElementContext } from "./element-context";
 import React from "react";
 import { type AnyElement } from "../schema";
 import { nanoid } from "nanoid";
-import { type type SimpleHeaderElement } from "./simple-header/simple-header.schema";
+import { type SimpleHeaderElement } from "./simple-header/simple-header.schema";
 import { type ProfileElement } from "./profile-element/profile-element.schema";
 
 // Instead of using different Option types, it is actually easier to only use customOptions

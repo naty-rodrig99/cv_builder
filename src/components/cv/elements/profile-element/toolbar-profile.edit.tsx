@@ -13,6 +13,7 @@ import { useDispatch } from "../../context";
 import { ProfileElement } from "./profile-element.schema";
 import { useState } from "react";
 import { fetchUser } from "~/app/profile/actions";
+import { setUserProfileElement } from "./profile-element.state";
 
 interface ProfileToolbarProps {
   element: ProfileElement;
@@ -37,9 +38,11 @@ const ProfileToolbar = ({ element }: ProfileToolbarProps) => {
           aboutMe: result.value.aboutMe,
         } satisfies ProfileElement["data"];
 
-        // dispatch() useReduce
+        dispatch(setUserProfileElement(element.id, data));
       }
-    } catch {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   return (

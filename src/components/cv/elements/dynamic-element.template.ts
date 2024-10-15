@@ -20,7 +20,7 @@ export const createElement = (elementType: AnyElement["type"]) => {
         email: "",
         address: "",
         aboutMe: "",
-      }); // QUESTION dispatch userData from here?
+      });
     default:
       return null;
   }
