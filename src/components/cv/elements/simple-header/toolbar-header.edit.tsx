@@ -22,7 +22,6 @@ interface HeaderToolbarProps {
 const HeaderToolbar = ({ element }: HeaderToolbarProps) => {
   const dispatch = useDispatch();
 
-  console.log(element);
   return (
     <>
       <MenubarMenu>
@@ -31,7 +30,6 @@ const HeaderToolbar = ({ element }: HeaderToolbarProps) => {
           <MenubarRadioGroup
             value={element.options.heading}
             onValueChange={(v) => {
-              console.log("use reducers for header", v);
               dispatch(setHeadingOption(element.id, v as SimpleHeaderLevels));
             }}
           >
