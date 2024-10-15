@@ -42,7 +42,6 @@ const ProfileToolbar = ({ element }: ProfileToolbarProps) => {
     } catch {}
   }
 
-  console.log(element);
   return (
     <>
       <MenubarMenu>
