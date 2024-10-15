@@ -53,7 +53,7 @@ const Draggable = ({ type, children }: DraggableProps) => {
   });
 
   return (
-    <button ref={setNodeRef} {...listeners} {...attributes}>
+    <button className="w-full" ref={setNodeRef} {...listeners} {...attributes}>
       {children}
     </button>
   );
@@ -291,7 +291,7 @@ const CvEditor = ({ cv, saveAction, exportAction }: CvEditorProps) => {
               <ZoomButtons />
             </ResizablePanel>
           </ResizablePanelGroup>
-          <DragOverlay>
+          <DragOverlay className="text-center">
             {activeElementType ? (
               <DynamicElementPreview elementType={activeElementType} />
             ) : null}
