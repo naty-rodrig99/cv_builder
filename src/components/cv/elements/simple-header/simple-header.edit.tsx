@@ -23,7 +23,7 @@ const SimpleHeaderEdit = ({ element }: SimpleHeaderEditProps) => {
         options={[customOption(<HeaderToolbar element={element} />)]}
       />
       <Input
-        className={simpleHeaderStyling(element.options.heading)}
+        className={simpleHeaderStyling(element.options?.heading)} // changes here
         value={element.data.text}
         onChange={(e) => dispatch(setHeaderText(element.id, e.target.value))}
         placeholder={placeholder}

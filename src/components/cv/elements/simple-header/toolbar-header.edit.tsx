@@ -22,14 +22,13 @@ interface HeaderToolbarProps {
 const HeaderToolbar = ({ element }: HeaderToolbarProps) => {
   const dispatch = useDispatch();
 
-  console.log(element);
   return (
     <>
       <MenubarMenu>
-        <MenubarTrigger>Heading: {element.options.heading}</MenubarTrigger>
+        <MenubarTrigger>Heading: {element.options?.heading}</MenubarTrigger>
         <MenubarContent>
           <MenubarRadioGroup
-            value={element.options.heading}
+            value={element.options?.heading}
             onValueChange={(v) => {
               console.log("use reducers for header", v);
               dispatch(setHeadingOption(element.id, v as SimpleHeaderLevels));

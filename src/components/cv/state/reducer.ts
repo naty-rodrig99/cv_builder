@@ -12,9 +12,13 @@ import {
   simpleLayoutReducer,
 } from "~/components/cv/elements/simple-layout/simple-layout.state";
 import {
-  SimpleHeaderActions,
+  type SimpleHeaderActions,
   simpleHeaderReducer,
 } from "~/components/cv/elements/simple-header/simple-header.state";
+import {
+  type UserProfileElementAction,
+  userProfileElementReducer,
+} from "../elements/profile-element/profile-element.state";
 
 export type CvBuilderState = {
   schema: CvSchema;
@@ -217,6 +221,7 @@ export type AnyAction =
   | SimpleTextActions
   | SimpleLayoutActions
   | SimpleHeaderActions
+  | UserProfileElementAction
   | FocusElementAction
   | DeleteElementAction
   | ZoomAction
@@ -231,6 +236,7 @@ export const cvStateReducer = (
     simpleTextReducer,
     simpleLayoutReducer,
     simpleHeaderReducer,
+    userProfileElementReducer,
     selectionReducer,
     elementReducer,
     ZoomReducer,
