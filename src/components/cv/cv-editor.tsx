@@ -7,7 +7,7 @@ import {
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
-import { H1, H3 } from "~/components/ui/typography";
+import { H1, H3, P } from "~/components/ui/typography";
 import {
   type AnyElement,
   cvFormats,
@@ -31,7 +31,9 @@ import { Separator } from "../ui/separator";
 import Paper from "~/components/paper";
 import DynamicElementPreview from "./elements/dynamic-element.preview";
 import { toast } from "sonner";
-import { Loader2Icon } from "lucide-react";
+import { ChevronLeftIcon, Loader2Icon, PrinterIcon } from "lucide-react";
+import Link from "next/link";
+import { routeProject, routeProjects } from "~/app/routes";
 
 const ELEMENT_LIST = [
   "simple-layout",
@@ -171,16 +173,34 @@ export const EditorHeader = ({
   onExport,
 }: EditorHeaderProps) => {
   return (
-    <header className="flex flex-row justify-between p-8">
-      <H1>
-        <input value={projectName} onChange={onRename}></input>
-      </H1>
-      <FormatSelector />
-      <Button variant="secondary" disabled={saving} onClick={onSave}>
-        {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
-        Save
-      </Button>
-      <Button onClick={onExport}>Export</Button>
+    <header className="w-full space-y-6 p-10 pb-0 pt-16">
+      <div className="flex w-full">
+        <div className="space-y-">
+          <div className="flex items-center">
+            <Button asChild variant="outline" size="icon" className="mr-4">
+              <Link href={routeProjects()} aria-label="Back">
+                <ChevronLeftIcon />
+              </Link>
+            </Button>
+            <H1>
+              <input value={projectName} onChange={onRename} />
+            </H1>
+          </div>
+          <P className="max-w-prose text-muted-foreground">
+            Drag and drop elements from the left panel to the preview. Then
+            export your CV using the "Export" button.
+          </P>
+        </div>
+        <div className="ml-auto flex gap-2">
+          <FormatSelector />
+          <Button variant="secondary" disabled={saving} onClick={onSave}>
+            {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
+            Save
+          </Button>
+          <Button onClick={onExport}>Export</Button>
+        </div>
+      </div>
+      <Separator className="my-6" />
     </header>
   );
 };
@@ -199,6 +219,7 @@ export interface CvEditorProps {
     schema: CvSchema;
   }) => Promise<void>;
 }
+
 const CvEditor = ({ cv, saveAction, exportAction }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.name, cv.schema);
   const [activeElementType, setActiveElementType] = useState<
