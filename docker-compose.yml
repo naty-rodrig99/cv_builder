@@ -4,6 +4,7 @@ services:
   app:
     platform: "linux/amd64"
     image: t3-app
+    container_name: cv-builder
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,4 +12,4 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "./db.sqlite:/app/db.sqlite"
+      - "./.data/:/app/.data/"

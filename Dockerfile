@@ -4,6 +4,7 @@ FROM --platform=linux/amd64 node:20.17-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
+# Yes yes, always use npm ci and in production…
 COPY package.json ./
 RUN npm i
 RUN npm i @node-rs/argon2-linux-x64-musl
