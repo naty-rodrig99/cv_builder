@@ -4,19 +4,12 @@ FROM --platform=linux/amd64 node:20.17-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
-# Copy local database into container. Alternatively create a new one
-
-COPY db.sqlite ./
-
-# Install dependencies based on the preferred package manager
-
-COPY package.json package-lock.json ./
-
-RUN npm ci
+COPY package.json ./
+RUN npm i
 
 # Build
 
-FROM --platform=linux/amd64 node:20-alpine AS builder
+FROM --platform=linux/amd64 node:20.17-alpine AS builder
 ARG DATABASE_URL
 ARG NEXT_PUBLIC_CLIENTVAR
 WORKDIR /app
@@ -26,6 +19,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN SKIP_ENV_VALIDATION=1 npm run build
+
+RUN npm run db:push
 
 # Run
 
