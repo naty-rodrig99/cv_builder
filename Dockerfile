@@ -6,6 +6,7 @@ WORKDIR /app
 
 COPY package.json ./
 RUN npm i
+RUN npm i @node-rs/argon2-linux-x64-musl
 
 # Build
 

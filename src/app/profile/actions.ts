@@ -75,8 +75,8 @@ export async function fetchUser(): ActionResult<
   UserProfile,
   { message: string; details?: unknown }
 > {
+  const user = await getUser();
   try {
-    const user = await getUser();
     if (user == null) {
       return actionError({ message: "Not authenticated!" });
     }

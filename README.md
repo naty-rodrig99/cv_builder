@@ -11,6 +11,7 @@ An application that helps you build CVs _fast!_
 2. Run `npm i`.
 3. Run `npm run db:push`.
 4. Run `docker compose up`.
+5. Visit `localhost:3000`.
 
 ## How do I run this?
 
