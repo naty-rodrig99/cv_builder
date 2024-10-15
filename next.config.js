@@ -6,8 +6,12 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  output: "standalone",
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
-    serverComponentsExternalPackages: ["@node-rs/argon2"],
+    serverComponentsExternalPackages: ["@node-rs/argon2", "libsql"],
   },
 };
 

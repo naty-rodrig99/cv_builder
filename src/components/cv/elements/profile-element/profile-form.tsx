@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { saveProfile, UserProfile } from "../../../../app/profile/actions";
+import { type UserProfile } from "~/app/profile/actions";
 import { z } from "zod";
 
 import {
@@ -18,6 +18,7 @@ import { useDebounce } from "~/lib/useDebounce";
 
 interface ProfileFormProps {
   profileData: UserProfile;
+  saveProfileDataAction: (profile: UserProfile) => Promise<unknown>;
 }
 
 const profileSchemaErrorMessages = z.object({
@@ -32,50 +33,50 @@ const profileSchemaErrorMessages = z.object({
   aboutMe: z.string(),
 });
 
-const ProfileForm = ({ profileData }: ProfileFormProps) => {
+const ProfileForm = ({
+  profileData,
+  saveProfileDataAction,
+}: ProfileFormProps) => {
   const [formProfileData, setFormProfileData] = useState({
-    fullName: profileData.fullName,
-    birthDate: profileData.birthDate,
-    phoneNumber: profileData.phoneNumber,
-    email: profileData.email,
-    address: profileData.address,
-    aboutMe: profileData.aboutMe,
+    fullName: profileData.fullName || "",
+    birthDate: profileData.birthDate || "",
+    phoneNumber: profileData.phoneNumber || "",
+    email: profileData.email || "",
+    address: profileData.address || "",
+    aboutMe: profileData.aboutMe || "",
   });
 
-  const debouncedRequest = useDebounce(() => {
-    validateAndSaveProfile();
-  });
-
-  const validateAndSaveProfile = async () => {
-    const saveResult = await saveProfile(profileData);
-    if (!saveResult.ok) {
-      console.error("Failed to save profile data", saveResult.error);
-      // TODO: notify user nicely
-    } else {
-      // console.log("Profile saved successfully.");
-      // TODO: notify user nicely
-    }
-  };
+  const debouncedSaveProfile = useDebounce(
+    async (profile: typeof formProfileData) => {
+      try {
+        await saveProfileDataAction({
+          ...profile,
+          userId: profileData.userId,
+        });
+      } catch (e) {
+        console.error("Failed to save profile data", e);
+      }
+    },
+  );
 
   const updateProfileField = (field: string, value: string) => {
-    setFormProfileData((prev) => ({
-      ...prev,
+    const profile = {
+      ...formProfileData,
       [field]:
         field === "birthDate"
           ? new Date(value).toISOString().split("T")[0]
           : value, // Handle conversion if necessary
-    }));
-
-    const validate = profileSchemaErrorMessages.safeParse(formProfileData);
-    if (!validate.success) {
-      console.error(validate.error);
-      // TODO: catch this error or idk
-    }
-    debouncedRequest();
+    };
+    setFormProfileData(profile);
+    debouncedSaveProfile(profile);
   };
 
   // Get today's date in YYYY-MM-DD format for the max attribute
   const today = new Date().toISOString().split("T")[0];
+
+  const errors = profileSchemaErrorMessages
+    .safeParse(formProfileData)
+    .error?.format();
 
   return (
     <Card className="w-full">
@@ -94,6 +95,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             placeholder="Full Name"
             onChange={(e) => updateProfileField("fullName", e.target.value)}
           />
+          {errors?.fullName?._errors}
         </div>
 
         <div className="grid gap-2">
@@ -105,6 +107,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             max={today}
             onChange={(e) => updateProfileField("birthDate", e.target.value)}
           />
+          {errors?.birthDate?._errors}
         </div>
 
         <div className="grid gap-2">
@@ -115,6 +118,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             placeholder="Phone Number"
             onChange={(e) => updateProfileField("phoneNumber", e.target.value)}
           />
+          {errors?.phoneNumber?._errors}
         </div>
 
         <div className="grid gap-2">
@@ -125,6 +129,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             placeholder="Email"
             onChange={(e) => updateProfileField("email", e.target.value)}
           />
+          {errors?.email?._errors}
         </div>
 
         <div className="grid gap-2">
@@ -135,6 +140,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             placeholder="Address"
             onChange={(e) => updateProfileField("address", e.target.value)}
           />
+          {errors?.address?._errors}
         </div>
 
         <div className="grid gap-2">
@@ -144,9 +150,8 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             placeholder="About Me"
             onChange={(e) => updateProfileField("aboutMe", e.target.value)}
           />
+          {errors?.aboutMe?._errors}
         </div>
-
-        <div id="error-placeholder"></div>
       </CardContent>
     </Card>
   );

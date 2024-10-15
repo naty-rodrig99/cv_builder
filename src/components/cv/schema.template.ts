@@ -11,7 +11,6 @@ export const newSchema = (args: { elements: ElementTemplate[] }) => {
 
   return {
     format: "DINA4",
-    // theme: "minimalistic",
     rootElement: rootElement.id,
     elements,
   } satisfies CvSchema;

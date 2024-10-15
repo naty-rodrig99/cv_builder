@@ -1,5 +1,5 @@
 import { type Reducer, updateElement } from "~/components/cv/state/reducer";
-import { SimpleTextElement } from "./simple-text.schema";
+import { type SimpleTextElement } from "./simple-text.schema";
 
 const SetText = Symbol.for("SetText");
 export const setText = (id: string, text: string) =>

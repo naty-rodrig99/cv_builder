@@ -7,7 +7,7 @@ import {
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
-import { H1, H3 } from "~/components/ui/typography";
+import { H1, H3, P } from "~/components/ui/typography";
 import {
   type AnyElement,
   cvFormats,
@@ -28,12 +28,12 @@ import { setFormat, setName, zoom } from "./state/reducer";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import Link from "next/link";
-import { routeProjectExport } from "~/app/routes";
 import Paper from "~/components/paper";
 import DynamicElementPreview from "./elements/dynamic-element.preview";
 import { toast } from "sonner";
-import { Loader2Icon } from "lucide-react";
+import { ChevronLeftIcon, Loader2Icon, PrinterIcon } from "lucide-react";
+import Link from "next/link";
+import { routeProject, routeProjects } from "~/app/routes";
 
 const ELEMENT_LIST = [
   "simple-layout",
@@ -160,37 +160,52 @@ const FormatSelector = () => {
 
 interface EditorHeaderProps {
   projectName: string;
-  projectId: string;
   onRename: (event: React.ChangeEvent<HTMLInputElement>) => void;
   saving: boolean;
   onSave: () => void;
+  onExport: () => void;
 }
 export const EditorHeader = ({
   projectName,
-  projectId,
   onRename,
   saving,
   onSave,
+  onExport,
 }: EditorHeaderProps) => {
   return (
-    <header className="flex flex-row justify-between p-8">
-      <H1>
-        <input value={projectName} onChange={onRename}></input>
-      </H1>
-      <FormatSelector />
-      <Button variant="secondary" disabled={saving} onClick={onSave}>
-        {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
-        Save
-      </Button>
-      <Button asChild>
-        <Link href={routeProjectExport(projectId)}>Export</Link>
-      </Button>
+    <header className="w-full space-y-6 p-10 pb-0 pt-16">
+      <div className="flex w-full">
+        <div className="space-y-">
+          <div className="flex items-center">
+            <Button asChild variant="outline" size="icon" className="mr-4">
+              <Link href={routeProjects()} aria-label="Back">
+                <ChevronLeftIcon />
+              </Link>
+            </Button>
+            <H1>
+              <input value={projectName} onChange={onRename} />
+            </H1>
+          </div>
+          <P className="max-w-prose text-muted-foreground">
+            Drag and drop elements from the left panel to the preview. Then
+            export your CV using the "Export" button.
+          </P>
+        </div>
+        <div className="ml-auto flex gap-2">
+          <FormatSelector />
+          <Button variant="secondary" disabled={saving} onClick={onSave}>
+            {saving && <Loader2Icon className="mr-2 size-4 animate-spin" />}
+            Save
+          </Button>
+          <Button onClick={onExport}>Export</Button>
+        </div>
+      </div>
+      <Separator className="my-6" />
     </header>
   );
 };
 
 export interface CvEditorProps {
-  projectId: string;
   cv: {
     name: string;
     schema: CvSchema;
@@ -199,8 +214,13 @@ export interface CvEditorProps {
     name: string | null;
     schema: CvSchema;
   }) => Promise<void>;
+  exportAction: (cvData: {
+    name: string | null;
+    schema: CvSchema;
+  }) => Promise<void>;
 }
-const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
+
+const CvEditor = ({ cv, saveAction, exportAction }: CvEditorProps) => {
   const [state, dispatch] = useCvEditorState(cv.name, cv.schema);
   const [activeElementType, setActiveElementType] = useState<
     AnyElement["type"] | null
@@ -227,15 +247,34 @@ const CvEditor = ({ projectId, cv, saveAction }: CvEditorProps) => {
     }
   };
 
+  const onExport = async () => {
+    setSavingSchema(true);
+    try {
+      await exportAction({
+        name: state.name,
+        schema: state.schema,
+      });
+      toast.success("Your CV has been saved");
+    } catch (error) {
+      console.error(error);
+      toast.error("We could not save your CV. Please try again later.", {
+        dismissible: true,
+        closeButton: true,
+      });
+    } finally {
+      setSavingSchema(false);
+    }
+  };
+
   return (
     <CvBuilderContextProvider state={state} dispatch={dispatch}>
       <div className="flex size-full flex-col">
         <EditorHeader
           projectName={state.name === null ? "Untitled CV" : state.name}
-          projectId={projectId}
           onRename={(event) => dispatch(setName(event.target.value))}
           saving={savingSchema}
           onSave={onSave}
+          onExport={onExport}
         />
         <DndContext
           id={useId()}

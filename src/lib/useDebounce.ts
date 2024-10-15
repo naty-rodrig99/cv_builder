@@ -16,8 +16,8 @@ export const useDebounce = <Fn extends (...args: any[]) => any>(
   }, [functionToCallback]);
 
   const debouncedCallback = useMemo(() => {
-    const func = () => {
-      ref.current?.();
+    const func = (...args: Parameters<Fn>) => {
+      ref.current?.(...args);
     };
 
     return debounce(func, 1000);

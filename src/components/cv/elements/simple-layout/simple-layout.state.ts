@@ -8,7 +8,7 @@ import { type AnyElement } from "../../schema";
 import { createElement } from "../dynamic-element.template";
 import {
   type SimpleLayoutDirections,
-  SimpleLayoutElement,
+  type SimpleLayoutElement,
 } from "./simple-layout.schema";
 
 const SetDirection = Symbol.for("SetDirection");

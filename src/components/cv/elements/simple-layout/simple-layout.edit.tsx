@@ -40,7 +40,7 @@ const SimpleLayoutEdit = ({ element }: SimpleLayoutEditProps) => {
       />
       <div
         className={cn(
-          "flex min-h-20 w-full min-w-24 gap-1 bg-blue-500 bg-opacity-10",
+          "flex min-h-20 w-full py-5 min-w-24 bg-blue-800 bg-opacity-5",
 
           {
             "flex-col": element.options.direction === "vertical",

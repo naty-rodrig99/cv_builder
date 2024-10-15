@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 import { newSchema } from "~/components/cv/schema.template";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { routeProjects } from "../routes";
+import { routeProject, routeProjects } from "../routes";
 
 export async function createNewProject(): ActionResult<
   null,
@@ -40,7 +40,7 @@ export async function createNewProject(): ActionResult<
       details: cvValues,
     });
   }
-  return redirect("/projects/" + cvId);
+  return redirect(routeProject(cvId));
 }
 
 export async function deleteProject(

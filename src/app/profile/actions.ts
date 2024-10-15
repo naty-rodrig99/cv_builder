@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 
 const profileSchemaDatabase = z.object({
   userId: z.string(),
-  fullName: z.string().trim(),
+  fullName: z.string(),
   birthDate: z.string(),
   phoneNumber: z.string(),
   email: z.string(),
@@ -28,7 +28,7 @@ export interface UserProfile {
 }
 
 export async function saveProfile(
-  profileData: z.infer<typeof profileSchemaDatabase>,
+  profileData: UserProfile,
 ): ActionResult<null, { message: string; details?: unknown }> {
   try {
     const user = await getUser();
@@ -47,18 +47,14 @@ export async function saveProfile(
       });
     }
 
-    // Convert the birthDate string to UNIX timestamp
-    const birthDateUnix = Math.floor(
-      new Date(result.data.birthDate).getTime() / 1000,
-    );
-
-    const birthDate = new Date(birthDateUnix * 1000);
+    const birthDate = new Date(result.data.birthDate);
+    const birthdateValid = Number.isFinite(birthDate.getTime());
 
     await db
       .update(userTable)
       .set({
         fullName: result.data.fullName,
-        birthDate: birthDate,
+        birthDate: birthdateValid ? birthDate : null,
         phoneNumber: result.data.phoneNumber,
         email: result.data.email,
         address: result.data.address,
@@ -79,8 +75,8 @@ export async function fetchUser(): ActionResult<
   UserProfile,
   { message: string; details?: unknown }
 > {
+  const user = await getUser();
   try {
-    const user = await getUser();
     if (user == null) {
       return actionError({ message: "Not authenticated!" });
     }
