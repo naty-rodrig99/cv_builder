@@ -8,8 +8,7 @@ An application that helps you build CVs _fast!_
 ## How do I run this? (I'm a course examiner)
 
 1. Clone the repo and `cd` into it.
-2. Run `npm i`.
-3. Run `npm run db:push`.
+2. Run `cp db.sqlite.example .data/db.sqlite`
 4. Run `docker compose up`.
 5. Visit `localhost:3000`.
 
